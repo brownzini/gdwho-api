@@ -9,4 +9,6 @@ import com.gdwho.api.domain.entities.user.UserDomainEntity;
 
 public interface UserGateway {
     List<UserDomainEntity> getAllUsers(Pageable pageable, UserFilterDomain filter);
+
+    UserDomainEntity findByUsername(String username);
 }

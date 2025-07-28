@@ -12,8 +12,9 @@ import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
 
 @Configuration
 public class UserConfig {
+    
     @Bean
-    UserUseCase createUserUseCase(UserGateway userGateway) {
+    UserUseCase createUserCase(UserGateway userGateway) {
         return new UserUseCase(userGateway);
     }
 

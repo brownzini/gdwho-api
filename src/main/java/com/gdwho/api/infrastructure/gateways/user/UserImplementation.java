@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gdwho.api.application.gateways.UserGateway;
@@ -23,6 +23,14 @@ public class UserImplementation implements UserGateway {
   public UserImplementation(UserRepository userRepository, UserEntityMapper userEntityMapper) {
     this.userRepository = userRepository;
     this.userEntityMapper = userEntityMapper;
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public UserDomainEntity findByUsername(String username) throws UsernameNotFoundException {
+    UserDBEntity userDBEntity = userRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    return userEntityMapper.toDomain(userDBEntity);
   }
 
   @Transactional(readOnly = true)

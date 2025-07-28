@@ -19,4 +19,8 @@ public class UserUseCase {
         return userGateway.getAllUsers(pageable, filter);
     }
 
+    public UserDomainEntity findByUsername(String username) {
+        return userGateway.findByUsername(username);
+    }
+
 }

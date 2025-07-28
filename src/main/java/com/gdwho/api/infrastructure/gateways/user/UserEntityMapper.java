@@ -8,7 +8,6 @@ import com.gdwho.api.domain.entities.user.UserDomainEntity;
 import com.gdwho.api.infrastructure.persistence.dtos.user.UserFilterDTO;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 
-
 public class UserEntityMapper {
 
   UserDBEntity toEntity(UserDomainEntity user) {
