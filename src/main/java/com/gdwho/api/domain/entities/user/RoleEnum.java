@@ -17,7 +17,7 @@ public enum RoleEnum {
     static {
         LOOKUP = Arrays.stream(RoleEnum.values())
                 .collect(Collectors.toMap(
-                    e -> e.name().toLowerCase(), // chave: nome minusculo
+                    e -> e.name().toLowerCase(),
                     e -> e
                 ));
     }
