@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.gdwho.api.infrastructure.filter.RateLimitingFilter;
 import com.gdwho.api.infrastructure.security.JwtAuthFilter;
 import com.gdwho.api.infrastructure.security.exceptions.CustomAccessDeniedHandler;
 import com.gdwho.api.infrastructure.security.exceptions.CustomAuthenticationEntryPoint;
@@ -22,6 +23,7 @@ import com.gdwho.api.infrastructure.security.exceptions.CustomAuthenticationEntr
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final RateLimitingFilter rateLimitingFilter;
 
     private final UserDetailsService userDetailsService;
     private final CustomAccessDeniedHandler accessDeniedHandler;
@@ -30,11 +32,13 @@ public class SecurityConfig {
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
             UserDetailsService userDetailsService,
             CustomAccessDeniedHandler accessDeniedHandler,
-            CustomAuthenticationEntryPoint authenticationEntryPoint) {
+            CustomAuthenticationEntryPoint authenticationEntryPoint,
+            RateLimitingFilter rateLimitingFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userDetailsService = userDetailsService;
         this.accessDeniedHandler = accessDeniedHandler;
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.rateLimitingFilter = rateLimitingFilter;
     }
 
     @Bean
@@ -48,6 +52,7 @@ public class SecurityConfig {
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint))
+                .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
