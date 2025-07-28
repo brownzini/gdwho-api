@@ -1,8 +1,11 @@
 package com.gdwho.api.domain.entities.user;
 
 import java.time.Instant;
+import java.util.List;
 
-public record UserDomainEntity(String username, String password, RoleEnum role, Instant createdAt) {
+import com.gdwho.api.domain.entities.guess.GuessDomainEntity;
+
+public record UserDomainEntity(String username, String password, RoleEnum role, Instant createdAt, List<GuessDomainEntity> guess) {
     public UserDomainEntity {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username cannot be blank");

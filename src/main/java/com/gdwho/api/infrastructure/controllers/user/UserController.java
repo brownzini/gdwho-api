@@ -34,7 +34,7 @@ public class UserController {
   @GetMapping
   public List<GetAllUsersResponseDTO> getAllUsers(Pageable pageable,
       @Valid @ModelAttribute GetAllUsersRequestDTO filter) {
-        
+  
     UserFilterDomain filterBusinessObj = userDTOMapper.toFilterDomain(filter);
     List<UserDomainEntity> usersList = userUseCase.getAllUsers(pageable, filterBusinessObj);
 

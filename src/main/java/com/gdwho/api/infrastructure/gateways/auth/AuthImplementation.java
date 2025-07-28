@@ -35,7 +35,7 @@ public class AuthImplementation implements AuthGateway {
     public String login(String username, String password) {
 
         UserResponseDTO user = userRepository.findDTOResponseByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("[Not found Error]: User not found: " + username));
 
         if (passwordEncoder.matches(password, user.password())) {
             String token = JwtUtil.generateToken(username);
