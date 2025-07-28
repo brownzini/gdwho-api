@@ -9,6 +9,7 @@ import com.gdwho.api.domain.entities.user.UserDomainEntity;
 import org.springframework.data.domain.Pageable;
 
 public class UserUseCase {
+    
     private final UserGateway userGateway;
 
     public UserUseCase(UserGateway userGateway) {

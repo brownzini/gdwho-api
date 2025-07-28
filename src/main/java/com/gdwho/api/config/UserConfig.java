@@ -32,4 +32,5 @@ public class UserConfig {
     UserDTOMapper userDTOMapper() {
         return new UserDTOMapper();
     }
+    
 }
