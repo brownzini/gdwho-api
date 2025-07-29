@@ -18,7 +18,7 @@ public class GuessEntityMapper {
         .toList();
   }
 
-  List<GuessDomainEntity> toDomainList(List<GuessDBEntity> inputList) {
+  List<GuessDomainEntity> toDomainList(List<GuessDBEntity> inputList, UserDBEntity user) {
     return inputList.stream()
         .map(guess -> new GuessDomainEntity(guess.getId(), guess.getInput()))
         .toList();

@@ -15,6 +15,8 @@ import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 import com.gdwho.api.infrastructure.persistence.repositories.GuessRepository;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 public class GuessImplementation implements GuessGateway {
 
     private final GuessRepository guessRepository;
@@ -28,13 +30,18 @@ public class GuessImplementation implements GuessGateway {
         this.guessEntityMapper = guessEntityMapper;
     }
 
+    @Transactional
     @Override
-    public void createGuess(List<String> inputs, Long userId) throws UsernameNotFoundException {
+    public void createGuess(String response, List<String> inputs, Long userId) throws UsernameNotFoundException {
         try {
             
             UserDBEntity user = userRepository.findById(userId)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userId));
+
             List<GuessDBEntity> guesses = guessEntityMapper.toEntityList(inputs, user);
+            user.setGuessResponse(response);
+
+            userRepository.save(user);
             guessRepository.saveAll(guesses);
 
         } catch (DataIntegrityViolationException ex) {

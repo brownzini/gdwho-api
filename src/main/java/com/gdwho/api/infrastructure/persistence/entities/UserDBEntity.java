@@ -26,6 +26,9 @@ public class UserDBEntity {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
+    @Column(length = 100)
+    private String guessResponse;
+
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false)
     private Instant createdAt;
 
@@ -36,10 +39,12 @@ public class UserDBEntity {
     public UserDBEntity() {
     }
 
-    public UserDBEntity(String username, String password, RoleEnum role, Instant createdAt, List<GuessDBEntity> guess) {
+    public UserDBEntity(String username, String password, RoleEnum role, String guessResponse, Instant createdAt,
+            List<GuessDBEntity> guess) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.guessResponse = guessResponse;
         this.createdAt = createdAt;
         this.guess = guess;
     }
@@ -74,6 +79,14 @@ public class UserDBEntity {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+    public String getGuessResponse() {
+        return guessResponse;
+    }
+
+    public void setGuessResponse(String guessResponse) {
+        this.guessResponse = guessResponse;
     }
 
     public Instant getCreatedAt() {

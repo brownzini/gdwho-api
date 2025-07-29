@@ -21,6 +21,7 @@ public class UserDTOMapper {
         .map(user -> new GetAllUsersResponseDTO(
             user.username(),
             user.password(),
+            user.guessResponse(),
             user.createdAt(),
             user.guess()
         ))

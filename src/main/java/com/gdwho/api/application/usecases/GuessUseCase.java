@@ -12,8 +12,8 @@ public class GuessUseCase {
         this.guessGateway = guessGateway;
     }
 
-    public void createGuess(List<String> inputs, Long userId) {
-        guessGateway.createGuess(inputs, userId);
+    public void createGuess(String response, List<String> inputs, Long userId) {
+        guessGateway.createGuess(response, inputs, userId);
     }
 
 }

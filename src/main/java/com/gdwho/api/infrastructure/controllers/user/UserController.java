@@ -1,5 +1,6 @@
 package com.gdwho.api.infrastructure.controllers.user;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gdwho.api.application.usecases.GuessUseCase;
 import com.gdwho.api.application.usecases.UserUseCase;
@@ -20,6 +22,7 @@ import com.gdwho.api.domain.entities.user.UserDomainEntity;
 import com.gdwho.api.infrastructure.controllers.user.dtos.UserDTOMapper;
 import com.gdwho.api.infrastructure.controllers.user.dtos.request.CreateGuessRequestDTO;
 import com.gdwho.api.infrastructure.controllers.user.dtos.request.GetAllUsersRequestDTO;
+import com.gdwho.api.infrastructure.controllers.user.dtos.response.CreateGuessResponseDTO;
 import com.gdwho.api.infrastructure.controllers.user.dtos.response.GetAllUsersResponseDTO;
 
 import jakarta.validation.Valid;
@@ -50,9 +53,11 @@ public class UserController {
   }
 
   @PostMapping("/{id}/guesses")
-  public ResponseEntity<Void> createGuess(@Valid @RequestBody CreateGuessRequestDTO request, @PathVariable Long id) {
-    guessUseCase.createGuess(request.inputs(), id);
-    return ResponseEntity.ok().build();
+  public ResponseEntity<CreateGuessResponseDTO> createGuess(@Valid @RequestBody CreateGuessRequestDTO request, @PathVariable Long id) {
+    guessUseCase.createGuess(request.response(), request.inputs(), id);
+    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(id).toUri();
+    return ResponseEntity.created(uri).body(new CreateGuessResponseDTO("created"));
   }
 
 }

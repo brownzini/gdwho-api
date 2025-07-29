@@ -22,6 +22,7 @@ public class UserEntityMapper {
         user.username(),
         user.password(),
         user.role(),
+        user.guessResponse(),
         user.createdAt(),
         guesses);
 
@@ -33,6 +34,7 @@ public class UserEntityMapper {
         user.getUsername(),
         user.getPassword(),
         user.getRole(),
+        user.getGuessResponse(),
         user.getCreatedAt(),
         user.getGuess().stream()
             .map(guess -> new GuessDomainEntity(guess.getId(), guess.getInput()))
@@ -49,6 +51,7 @@ public class UserEntityMapper {
             user.getUsername(),
             user.getPassword(),
             user.getRole(),
+            user.getGuessResponse(),
             user.getCreatedAt(),
             user.getGuess().stream()
                 .map(guess -> new GuessDomainEntity(guess.getId(), guess.getInput()))

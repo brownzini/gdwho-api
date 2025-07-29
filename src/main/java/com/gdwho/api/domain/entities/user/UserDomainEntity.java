@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.gdwho.api.domain.entities.guess.GuessDomainEntity;
 
-public record UserDomainEntity(String username, String password, RoleEnum role, Instant createdAt, List<GuessDomainEntity> guess) {
+public record UserDomainEntity(String username, String password, RoleEnum role, String guessResponse, Instant createdAt, List<GuessDomainEntity> guess) {
     public UserDomainEntity {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username cannot be blank");

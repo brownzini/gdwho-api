@@ -20,17 +20,17 @@ public class GuessDBEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserDBEntity user;
 
-    public void setUser(UserDBEntity user) {
-        this.user = user;
-    }
-
     public GuessDBEntity() {
     }
 
     public GuessDBEntity(String input) {
         this.input = input;
     }
-    
+
+    public void setUser(UserDBEntity user) {
+        this.user = user;
+    }
+
     public String getInput() {
         return input;
     }
