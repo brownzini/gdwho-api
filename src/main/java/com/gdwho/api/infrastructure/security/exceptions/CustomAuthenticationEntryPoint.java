@@ -17,6 +17,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write("{\"error\": \"Unauthenticated: invalid or non-existent token\"}");
+        response.getWriter().write("{\"error\": \"[Unauthenticated]: invalid or non-existent token\"}");
     }
 }

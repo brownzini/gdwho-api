@@ -4,6 +4,6 @@ import java.time.Instant;
 
 import com.gdwho.api.domain.entities.user.RoleEnum;
 
-public record RegisterAuthResponseDTO(String username, RoleEnum role, Instant createdAfter) {
+public record RegisterAuthResponseDTO(Long id, String username, RoleEnum role, Instant createdAfter) {
 
 }

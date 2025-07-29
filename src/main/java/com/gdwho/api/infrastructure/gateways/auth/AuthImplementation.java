@@ -8,8 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gdwho.api.application.gateways.AuthGateway;
+import com.gdwho.api.domain.entities.auth.AuthDomainEntity;
 
-import com.gdwho.api.infrastructure.controllers.auth.dtos.response.RegisterAuthResponseDTO;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
 import com.gdwho.api.infrastructure.persistence.dtos.user.UserResponseDTO;
@@ -47,7 +47,7 @@ public class AuthImplementation implements AuthGateway {
 
     @Transactional
     @Override
-    public RegisterAuthResponseDTO register(String username, String password) {
+    public AuthDomainEntity register(String username, String password) {
 
         try {
 

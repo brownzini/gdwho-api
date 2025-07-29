@@ -1,6 +1,6 @@
 package com.gdwho.api.domain.entities.auth;
 
-public record AuthDomainEntity(String username, String password) {
+public record AuthDomainEntity(Long id, String username, String password) {
     public AuthDomainEntity {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username cannot be blank");

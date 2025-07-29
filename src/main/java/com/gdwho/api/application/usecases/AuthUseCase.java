@@ -1,8 +1,7 @@
 package com.gdwho.api.application.usecases;
 
 import com.gdwho.api.application.gateways.AuthGateway;
-
-import com.gdwho.api.infrastructure.controllers.auth.dtos.response.RegisterAuthResponseDTO;
+import com.gdwho.api.domain.entities.auth.AuthDomainEntity;
 
 public class AuthUseCase {
 
@@ -16,7 +15,7 @@ public class AuthUseCase {
         return authGateway.login(username, password);
     }
 
-    public RegisterAuthResponseDTO register(String username, String password) {
+    public AuthDomainEntity register(String username, String password) {
         return authGateway.register(username, password);
     }
 }

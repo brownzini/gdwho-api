@@ -2,16 +2,16 @@ package com.gdwho.api.infrastructure.gateways.auth;
 
 import java.time.Instant;
 
+import com.gdwho.api.domain.entities.auth.AuthDomainEntity;
 import com.gdwho.api.domain.entities.user.RoleEnum;
 
-import com.gdwho.api.infrastructure.controllers.auth.dtos.response.RegisterAuthResponseDTO;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 
 public class AuthEntityMapper {
     UserDBEntity toRegisterUserDBEntity(String username, String password) {
-        return new UserDBEntity(username, password, RoleEnum.ADMIN, Instant.now(), null);
+        return new UserDBEntity(username, password, RoleEnum.USER, Instant.now(), null);
     }
-    RegisterAuthResponseDTO toRegisterUserDomainEntity(UserDBEntity user) {
-        return new RegisterAuthResponseDTO(user.getUsername(), user.getRole(), user.getCreatedAt());
+    AuthDomainEntity toRegisterUserDomainEntity(UserDBEntity user) {
+        return new AuthDomainEntity(user.getId(), user.getUsername(), user.getPassword());
     }
 }
