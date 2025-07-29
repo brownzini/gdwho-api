@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.gdwho.api.infrastructure.persistence.dtos.user.UserFilterDTO;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 
@@ -16,19 +15,13 @@ public class UserSpecifications {
 
     public static Specification<UserDBEntity> withFilters(UserFilterDTO filter) {
         return (root, query, cb) -> {
-            final int expectedPredicates = 3;
+            final int expectedPredicates = 2;
             List<Predicate> predicates = new ArrayList<>(expectedPredicates);
 
             String username = filter.username();
             if (username != null) {
                 String likeUsernameField = "%" + username.toLowerCase() + "%";
                 predicates.add(cb.like(cb.lower(root.get("username")), likeUsernameField));
-            }
-
-            if (filter.role() != null) {
-                String role = filter.role().toString();
-                RoleEnum roleEnum = RoleEnum.valueOf(role.toUpperCase()); 
-                predicates.add(cb.equal(root.get("role"), roleEnum));
             }
 
             Instant createdAfter = filter.createdAfter();

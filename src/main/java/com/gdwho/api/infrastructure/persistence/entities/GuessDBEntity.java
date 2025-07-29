@@ -27,7 +27,7 @@ public class GuessDBEntity {
     public GuessDBEntity() {
     }
 
-    public GuessDBEntity(Long id, String input) {
+    public GuessDBEntity(String input) {
         this.input = input;
     }
     

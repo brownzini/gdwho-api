@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 
 import com.gdwho.api.domain.entities.guess.GuessDomainEntity;
-import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.gdwho.api.domain.entities.user.UserDomainEntity;
 
 import com.gdwho.api.infrastructure.persistence.dtos.user.UserFilterDTO;
@@ -16,7 +15,7 @@ public class UserEntityMapper {
   UserDBEntity toEntity(UserDomainEntity user) {
 
     List<GuessDBEntity> guesses = user.guess().stream()
-        .map(guess -> new GuessDBEntity(guess.id(), guess.input()))
+        .map(guess -> new GuessDBEntity(guess.input()))
         .toList();
 
     UserDBEntity entity = new UserDBEntity(
@@ -40,8 +39,8 @@ public class UserEntityMapper {
             .toList());
   }
 
-  UserFilterDTO toFilter(String username, RoleEnum role, Instant createdAfter) {
-    return new UserFilterDTO(username, role, createdAfter);
+  UserFilterDTO toFilter(String username, Instant createdAfter) {
+    return new UserFilterDTO(username, createdAfter);
   }
 
   public List<UserDomainEntity> toDomainList(List<UserDBEntity> users) {

@@ -37,7 +37,7 @@ public class UserImplementation implements UserGateway {
   @Override
   public List<UserDomainEntity> getAllUsers(Pageable pageable, UserFilterDomain filter) {
 
-    UserFilterDTO filterQuery = userEntityMapper.toFilter(filter.username(), filter.role(), filter.createdAfter());
+    UserFilterDTO filterQuery = userEntityMapper.toFilter(filter.username(), filter.createdAfter());
     Specification<UserDBEntity> spec = UserSpecifications.withFilters(filterQuery);
 
     List<UserDBEntity> userDBEntity = userRepository.findAll(spec, pageable).getContent();

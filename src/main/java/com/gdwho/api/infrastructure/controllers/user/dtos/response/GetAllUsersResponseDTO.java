@@ -4,8 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import com.gdwho.api.domain.entities.guess.GuessDomainEntity;
-import com.gdwho.api.domain.entities.user.RoleEnum;
 
-public record GetAllUsersResponseDTO(String username, String password, RoleEnum role, Instant createdAt, List<GuessDomainEntity> guess) {
+public record GetAllUsersResponseDTO(String username, String password, Instant createdAt, List<GuessDomainEntity> guess) {
 
 }
