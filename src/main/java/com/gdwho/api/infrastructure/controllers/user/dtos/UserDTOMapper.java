@@ -23,7 +23,8 @@ public class UserDTOMapper {
             user.password(),
             user.dataResponse(),
             user.createdAt(),
-            user.dataList()
+            user.dataList(),
+            user.entries()
         ))
         .toList();
   }

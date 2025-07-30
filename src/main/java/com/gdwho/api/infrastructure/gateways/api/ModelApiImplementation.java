@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 
 import com.gdwho.api.application.gateways.ModelApiGateway;
-import com.gdwho.api.domain.shape.EntriesDomainShape;
+import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 import com.gdwho.api.infrastructure.gateways.api.dto.request.GuessRequestDTO;
 import com.gdwho.api.infrastructure.gateways.api.dto.request.TrainRequestDTO;
 
@@ -18,7 +18,7 @@ public class ModelApiImplementation implements ModelApiGateway {
   }
 
   @Override
-  public String train(Long id, List<EntriesDomainShape> entries) {
+  public String train(Long id, List<EntriesDomainEntity> entries) {
     return client.train(new TrainRequestDTO(id, entries)).message();
   }
 

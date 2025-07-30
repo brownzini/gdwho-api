@@ -2,9 +2,9 @@ package com.gdwho.api.application.gateways;
 
 import java.util.List;
 
-import com.gdwho.api.domain.shape.EntriesDomainShape;
+import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 
 public interface ModelApiGateway {
-    public String train(Long id, List<EntriesDomainShape> data);
-    public double guess(Long id, List<String> data, String input);
+    String train(Long id, List<EntriesDomainEntity> data);
+    double guess(Long id, List<String> data, String input);
 }

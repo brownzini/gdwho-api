@@ -10,7 +10,7 @@ public class ExternalFeignConfig {
 
   @Bean
   public Request.Options feignOptions() {
-    return new Request.Options(5000, 50000);
+    return new Request.Options(5000, 120000);
   }
 
   @Bean

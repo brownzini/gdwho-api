@@ -36,25 +36,26 @@ public class UserDBEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DataDBEntity> data = new ArrayList<>();
 
+    @JsonManagedReference("user-entries")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EntriesDBEntity> entries = new ArrayList<>();
+
     public UserDBEntity() {
     }
 
     public UserDBEntity(String username, String password, RoleEnum role, String dataResponse, Instant createdAt,
-            List<DataDBEntity> data) {
+            List<DataDBEntity> data, List<EntriesDBEntity> entries) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.dataResponse = dataResponse;
         this.createdAt = createdAt;
         this.data = data;
+        this.entries = entries;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public List<DataDBEntity> getData() {
-        return data;
     }
 
     public String getUsername() {
@@ -79,6 +80,14 @@ public class UserDBEntity {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+    public List<DataDBEntity> getData() {
+        return data;
+    }
+
+    public List<EntriesDBEntity> getEntries() {
+        return entries;
     }
 
     public String getDataResponse() {

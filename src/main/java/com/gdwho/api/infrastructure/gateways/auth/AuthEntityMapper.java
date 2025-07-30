@@ -9,7 +9,7 @@ import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 
 public class AuthEntityMapper {
     UserDBEntity toRegisterUserDBEntity(String username, String password) {
-        return new UserDBEntity(username, password, RoleEnum.USER, null, Instant.now(), null);
+        return new UserDBEntity(username, password, RoleEnum.USER, null, Instant.now(), null, null);
     }
     AuthDomainEntity toRegisterUserDomainEntity(UserDBEntity user) {
         return new AuthDomainEntity(user.getId(), user.getUsername(), user.getPassword());

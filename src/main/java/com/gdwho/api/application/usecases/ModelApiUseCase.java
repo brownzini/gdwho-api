@@ -3,7 +3,7 @@ package com.gdwho.api.application.usecases;
 import java.util.List;
 
 import com.gdwho.api.application.gateways.ModelApiGateway;
-import com.gdwho.api.domain.shape.EntriesDomainShape;
+import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 
 public class ModelApiUseCase {
 
@@ -13,7 +13,7 @@ public class ModelApiUseCase {
         this.modelApiGateway = modelApiGateway;
     }
 
-    public String train(Long id, List<EntriesDomainShape> data) {
+    public String train(Long id, List<EntriesDomainEntity> data) {
         return modelApiGateway.train(id, data);
     }
 
