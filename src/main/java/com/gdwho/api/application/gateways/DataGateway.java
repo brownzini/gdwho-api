@@ -6,4 +6,5 @@ import com.gdwho.api.domain.shape.EntriesDomainShape;
 
 public interface DataGateway {
     public void createData(String response, List<String> dataList, List<EntriesDomainShape> entries, Long userId);
+    public double guessResult(String input, Long userId);
 }

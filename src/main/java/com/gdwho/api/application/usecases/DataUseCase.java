@@ -17,4 +17,8 @@ public class DataUseCase {
         dataGateway.createData(response, dataList, entries, userId);
     }
 
+    public double guessResult(String input, Long userId) {
+       return dataGateway.guessResult(input, userId);
+    }
+
 }

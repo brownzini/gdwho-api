@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                      .requestMatchers("/v1/api/auth/**").permitAll()
-                        .requestMatchers("/v1/api/users/**", "/v1/api/data/**").hasRole("ADMIN")
+                        .requestMatchers("/v1/api/users/**", "/v1/api/data/**", "/v1/api/game/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedHandler(accessDeniedHandler)

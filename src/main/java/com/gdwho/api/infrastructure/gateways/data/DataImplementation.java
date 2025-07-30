@@ -17,7 +17,7 @@ import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 import com.gdwho.api.infrastructure.persistence.repositories.DataRepository;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 public class DataImplementation implements DataGateway {
 
@@ -32,6 +32,16 @@ public class DataImplementation implements DataGateway {
         this.userRepository = userRepository;
         this.dataEntityMapper = dataEntityMapper;
         this.modelApiUseCase = modelApiUseCase;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public double guessResult(String input, Long userId) {
+        List<String> dataList = dataRepository.findValuesByUserId(userId);
+        if (dataList.isEmpty()) {
+            throw new UsernameNotFoundException("User not found: " + userId);
+        }
+        return modelApiUseCase.guess(userId, dataList, input);
     }
 
     @Transactional
@@ -61,7 +71,7 @@ public class DataImplementation implements DataGateway {
                 throw new UserAlreadyExistsException("[Invalid input Error]: A input with this value already exists",
                         ex);
             }
-            throw new UserPersistenceException("[Persistence Error]: Error persisting the user", ex);
+            throw new UserPersistenceException("[Persistence Error]: Error persisting the user data", ex);
         }
 
     }
