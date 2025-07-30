@@ -7,9 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.gdwho.api.application.gateways.DataGateway;
-
+import com.gdwho.api.application.usecases.ModelApiUseCase;
 import com.gdwho.api.domain.shape.EntriesDomainShape;
-import com.gdwho.api.infrastructure.gateways.api.ModeApiImplementation;
 import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
@@ -25,14 +24,14 @@ public class DataImplementation implements DataGateway {
     private final DataRepository dataRepository;
     private final UserRepository userRepository;
     private final DataEntityMapper dataEntityMapper;
-    private final ModeApiImplementation modeApiImplementation;
+    private final ModelApiUseCase modelApiUseCase;
 
     public DataImplementation(DataRepository dataRepository, DataEntityMapper dataEntityMapper,
-            UserRepository userRepository, ModeApiImplementation modeApiImplementation) {
+            UserRepository userRepository, ModelApiUseCase modelApiUseCase) {
         this.dataRepository = dataRepository;
         this.userRepository = userRepository;
         this.dataEntityMapper = dataEntityMapper;
-        this.modeApiImplementation = modeApiImplementation;
+        this.modelApiUseCase = modelApiUseCase;
     }
 
     @Transactional
@@ -47,9 +46,9 @@ public class DataImplementation implements DataGateway {
             List<DataDBEntity> entityDataList = dataEntityMapper.toEntityList(dataList, user);
             user.setDataResponse(response);
 
-            String trainResponse = modeApiImplementation.train(userId, entries);
+            String trainResponse = modelApiUseCase.train(userId, entries);
 
-            if (trainResponse == "success") {
+            if (trainResponse.equals("success")) {
                 userRepository.save(user);
                 dataRepository.saveAll(entityDataList);
             } else {

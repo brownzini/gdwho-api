@@ -9,11 +9,11 @@ import com.gdwho.api.domain.shape.EntriesDomainShape;
 import com.gdwho.api.infrastructure.gateways.api.dto.request.GuessRequestDTO;
 import com.gdwho.api.infrastructure.gateways.api.dto.request.TrainRequestDTO;
 
-public class ModeApiImplementation implements ModelApiGateway {
+public class ModelApiImplementation implements ModelApiGateway {
 
   private final ModelV1ApiClient client;
 
-  public ModeApiImplementation(ModelV1ApiClient client) {
+  public ModelApiImplementation(ModelV1ApiClient client) {
     this.client = client;
   }
 
