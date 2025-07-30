@@ -3,6 +3,7 @@ package com.gdwho.api.application.usecases;
 import java.util.List;
 
 import com.gdwho.api.application.gateways.DataGateway;
+import com.gdwho.api.domain.shape.EntriesDomainShape;
 
 public class DataUseCase {
 
@@ -12,8 +13,8 @@ public class DataUseCase {
         this.dataGateway = dataGateway;
     }
 
-    public void createData(String response, List<String> inputs, Long userId) {
-        dataGateway.createData(response, inputs, userId);
+    public void createData(String response, List<String> dataList, List<EntriesDomainShape> entries, Long userId) {
+        dataGateway.createData(response, dataList, entries, userId);
     }
 
 }

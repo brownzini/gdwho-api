@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.gdwho.api.application.gateways.DataGateway;
 
+import com.gdwho.api.domain.shape.EntriesDomainShape;
+import com.gdwho.api.infrastructure.gateways.api.ModeApiImplementation;
+import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
 import com.gdwho.api.infrastructure.persistence.entities.DataDBEntity;
@@ -22,27 +25,36 @@ public class DataImplementation implements DataGateway {
     private final DataRepository dataRepository;
     private final UserRepository userRepository;
     private final DataEntityMapper dataEntityMapper;
+    private final ModeApiImplementation modeApiImplementation;
 
     public DataImplementation(DataRepository dataRepository, DataEntityMapper dataEntityMapper,
-            UserRepository userRepository) {
+            UserRepository userRepository, ModeApiImplementation modeApiImplementation) {
         this.dataRepository = dataRepository;
         this.userRepository = userRepository;
         this.dataEntityMapper = dataEntityMapper;
+        this.modeApiImplementation = modeApiImplementation;
     }
 
     @Transactional
     @Override
-    public void createData(String response, List<String> inputs, Long userId) throws UsernameNotFoundException {
+    public void createData(String response, List<String> dataList, List<EntriesDomainShape> entries, Long userId)
+            throws UsernameNotFoundException {
         try {
-            
+
             UserDBEntity user = userRepository.findById(userId)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userId));
 
-            List<DataDBEntity> dataList = dataEntityMapper.toEntityList(inputs, user);
+            List<DataDBEntity> entityDataList = dataEntityMapper.toEntityList(dataList, user);
             user.setDataResponse(response);
 
-            userRepository.save(user);
-            dataRepository.saveAll(dataList);
+            String trainResponse = modeApiImplementation.train(userId, entries);
+
+            if (trainResponse == "success") {
+                userRepository.save(user);
+                dataRepository.saveAll(entityDataList);
+            } else {
+                throw new NotPossibleTrainModelException("[Train Error]: Error when training model");
+            }
 
         } catch (DataIntegrityViolationException ex) {
             if (ex.getCause() instanceof ConstraintViolationException

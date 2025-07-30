@@ -1,10 +1,13 @@
 package com.gdwho.api.infrastructure.gateways.api;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.cache.annotation.Cacheable;
 
 import com.gdwho.api.application.gateways.ModelApiGateway;
+import com.gdwho.api.domain.shape.EntriesDomainShape;
+import com.gdwho.api.infrastructure.gateways.api.dto.request.GuessRequestDTO;
+import com.gdwho.api.infrastructure.gateways.api.dto.request.TrainRequestDTO;
 
 public class ModeApiImplementation implements ModelApiGateway {
 
@@ -14,13 +17,14 @@ public class ModeApiImplementation implements ModelApiGateway {
     this.client = client;
   }
 
+  @Override
+  public String train(Long id, List<EntriesDomainShape> entries) {
+    return client.train(new TrainRequestDTO(id, entries)).message();
+  }
+
   @Cacheable(cacheNames = "input", key = "T(java.lang.String).format('%s::input::%s', #id, #input?.toLowerCase()?.trim())", unless = "#result == null")
   @Override
-  public BigDecimal send(Long id, String input) {
-    String value = (input == null ? "" : input.trim().toLowerCase());
-    if (value.isBlank()) {
-      throw new IllegalArgumentException("[Param Error]: Input is requeried");
-    }
-    return client.getResult(id, value).result();
+  public double guess(Long id, List<String> data, String input) {
+    return client.guess(new GuessRequestDTO(id, data, input)).result();
   }
 }

@@ -15,7 +15,7 @@ public class UserEntityMapper {
   UserDBEntity toEntity(UserDomainEntity user) {
 
     List<DataDBEntity> listFromData = user.dataList().stream()
-        .map(data -> new DataDBEntity(data.input()))
+        .map(data -> new DataDBEntity(data.value()))
         .toList();
 
     UserDBEntity entity = new UserDBEntity(
@@ -37,7 +37,7 @@ public class UserEntityMapper {
         user.getDataResponse(),
         user.getCreatedAt(),
         user.getData().stream()
-            .map(data -> new DataDomainEntity(data.getId(), data.getInput(), data.getOutput(), data.getLabel()))
+            .map(data -> new DataDomainEntity(data.getId(), data.getValue()))
             .toList());
   }
 
@@ -54,7 +54,7 @@ public class UserEntityMapper {
             user.getDataResponse(),
             user.getCreatedAt(),
             user.getData().stream()
-                .map(data -> new DataDomainEntity(data.getId(), data.getInput(), data.getOutput(), data.getLabel()))
+                .map(data -> new DataDomainEntity(data.getId(), data.getValue()))
                 .toList()))
         .toList();
   }

@@ -13,13 +13,7 @@ public class DataDBEntity {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String input;
-
-    @Column(nullable = false, length = 100)
-    private String output;
-
-    @Column(nullable = false)
-    private double label;
+    private String value;
 
     @JsonBackReference("user-data")
     @ManyToOne()
@@ -29,8 +23,8 @@ public class DataDBEntity {
     public DataDBEntity() {
     }
 
-    public DataDBEntity(String input) {
-        this.input = input;
+    public DataDBEntity(String value) {
+        this.value = value;
     }
 
     public Long getId() {
@@ -41,28 +35,12 @@ public class DataDBEntity {
         this.user = user;
     }
 
-    public String getInput() {
-        return input;
+    public String getValue() {
+        return value;
     }
 
-    public void setInput(String input) {
-        this.input = input;
-    }
-
-    public String getOutput() {
-        return output;
-    }
-
-    public void setOutput(String output) {
-        this.output = output;
-    }
-
-    public double getLabel() {
-        return label;
-    }
-
-    public void setLabel(double label) {
-        this.label = label;
+    public void setInput(String value) {
+        this.value = value;
     }
 
     public UserDBEntity getUser() {

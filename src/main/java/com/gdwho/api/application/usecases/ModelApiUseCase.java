@@ -1,8 +1,9 @@
 package com.gdwho.api.application.usecases;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 import com.gdwho.api.application.gateways.ModelApiGateway;
+import com.gdwho.api.domain.shape.EntriesDomainShape;
 
 public class ModelApiUseCase {
 
@@ -12,8 +13,12 @@ public class ModelApiUseCase {
         this.modelApiGateway = modelApiGateway;
     }
 
-    public BigDecimal send(Long id, String input) {
-        return modelApiGateway.send(id, input);
+    public String train(Long id, List<EntriesDomainShape> data) {
+        return modelApiGateway.train(id, data);
     }
-    
+
+    public double guess(Long id, List<String> data, String input) {
+        return modelApiGateway.guess(id, data, input);
+    }
+
 }

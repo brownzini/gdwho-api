@@ -10,8 +10,8 @@ public class DataEntityMapper {
 
   List<DataDBEntity> toEntityList(List<String> inputsList, UserDBEntity userDBEntity) {
     return inputsList.stream()
-        .map(input -> {
-          DataDBEntity data = new DataDBEntity(input);
+        .map(elementData -> {
+          DataDBEntity data = new DataDBEntity(elementData);
           data.setUser(userDBEntity);
           return data;
         })
@@ -20,7 +20,7 @@ public class DataEntityMapper {
 
   List<DataDomainEntity> toDomainList(List<DataDBEntity> inputList, UserDBEntity user) {
     return inputList.stream()
-        .map(data -> new DataDomainEntity(data.getId(), data.getInput(), data.getOutput(), data.getLabel()))
+        .map(data -> new DataDomainEntity(data.getId(), data.getValue()))
         .toList();
   }
 

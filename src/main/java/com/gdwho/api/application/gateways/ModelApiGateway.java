@@ -1,7 +1,10 @@
 package com.gdwho.api.application.gateways;
 
-import java.math.BigDecimal;
+import java.util.List;
+
+import com.gdwho.api.domain.shape.EntriesDomainShape;
 
 public interface ModelApiGateway {
-    public BigDecimal send(Long id, String input);
+    public String train(Long id, List<EntriesDomainShape> data);
+    public double guess(Long id, List<String> data, String input);
 }

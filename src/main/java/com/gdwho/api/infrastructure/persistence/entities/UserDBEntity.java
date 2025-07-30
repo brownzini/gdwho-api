@@ -26,7 +26,7 @@ public class UserDBEntity {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @Column(length = 100)
+    @Column(length = 50)
     private String dataResponse;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false)
