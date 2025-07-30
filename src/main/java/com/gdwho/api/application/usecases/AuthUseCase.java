@@ -18,4 +18,5 @@ public class AuthUseCase {
     public AuthDomainEntity register(String username, String password) {
         return authGateway.register(username, password);
     }
+    
 }

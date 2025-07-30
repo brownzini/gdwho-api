@@ -22,7 +22,7 @@ import com.gdwho.api.infrastructure.controllers.auth.dtos.response.RegisterAuthR
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/v1/api/auth")
 public class AuthController {
 
     private final AuthUseCase authUseCase;
