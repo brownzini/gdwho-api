@@ -1,2 +1,2 @@
 -- Inserindo na tabela de usuarios
-INSERT INTO users (username, password, role, guess_response, created_at) VALUES ('master', '$2a$10$EgaEA06/7BOmfVSvTOq8K.cEIO89U0AKMmQ0vwKvcT3xNZvqpdyZm', 'ADMIN', null, NOW());
+INSERT INTO users (username, password, role, data_response, created_at) VALUES ('master', '$2a$10$EgaEA06/7BOmfVSvTOq8K.cEIO89U0AKMmQ0vwKvcT3xNZvqpdyZm', 'ADMIN', null, NOW());

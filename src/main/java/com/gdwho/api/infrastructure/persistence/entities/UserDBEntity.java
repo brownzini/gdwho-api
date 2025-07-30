@@ -27,34 +27,34 @@ public class UserDBEntity {
     private RoleEnum role;
 
     @Column(length = 100)
-    private String guessResponse;
+    private String dataResponse;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false)
     private Instant createdAt;
 
-    @JsonManagedReference("user-guess")
+    @JsonManagedReference("user-data")
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GuessDBEntity> guess = new ArrayList<>();
+    private List<DataDBEntity> data = new ArrayList<>();
 
     public UserDBEntity() {
     }
 
-    public UserDBEntity(String username, String password, RoleEnum role, String guessResponse, Instant createdAt,
-            List<GuessDBEntity> guess) {
+    public UserDBEntity(String username, String password, RoleEnum role, String dataResponse, Instant createdAt,
+            List<DataDBEntity> data) {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.guessResponse = guessResponse;
+        this.dataResponse = dataResponse;
         this.createdAt = createdAt;
-        this.guess = guess;
+        this.data = data;
     }
 
     public Long getId() {
         return id;
     }
 
-    public List<GuessDBEntity> getGuess() {
-        return guess;
+    public List<DataDBEntity> getData() {
+        return data;
     }
 
     public String getUsername() {
@@ -81,12 +81,12 @@ public class UserDBEntity {
         this.role = role;
     }
 
-    public String getGuessResponse() {
-        return guessResponse;
+    public String getDataResponse() {
+        return dataResponse;
     }
 
-    public void setGuessResponse(String guessResponse) {
-        this.guessResponse = guessResponse;
+    public void setDataResponse(String dataResponse) {
+        this.dataResponse = dataResponse;
     }
 
     public Instant getCreatedAt() {

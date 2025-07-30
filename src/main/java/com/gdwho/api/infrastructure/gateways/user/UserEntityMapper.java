@@ -3,28 +3,28 @@ package com.gdwho.api.infrastructure.gateways.user;
 import java.time.Instant;
 import java.util.List;
 
-import com.gdwho.api.domain.entities.guess.GuessDomainEntity;
+import com.gdwho.api.domain.entities.data.DataDomainEntity;
 import com.gdwho.api.domain.entities.user.UserDomainEntity;
 
 import com.gdwho.api.infrastructure.persistence.dtos.user.UserFilterDTO;
-import com.gdwho.api.infrastructure.persistence.entities.GuessDBEntity;
+import com.gdwho.api.infrastructure.persistence.entities.DataDBEntity;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 
 public class UserEntityMapper {
 
   UserDBEntity toEntity(UserDomainEntity user) {
 
-    List<GuessDBEntity> guesses = user.guess().stream()
-        .map(guess -> new GuessDBEntity(guess.input()))
+    List<DataDBEntity> listFromData = user.dataList().stream()
+        .map(data -> new DataDBEntity(data.input()))
         .toList();
 
     UserDBEntity entity = new UserDBEntity(
         user.username(),
         user.password(),
         user.role(),
-        user.guessResponse(),
+        user.dataResponse(),
         user.createdAt(),
-        guesses);
+        listFromData);
 
     return entity;
   }
@@ -34,10 +34,10 @@ public class UserEntityMapper {
         user.getUsername(),
         user.getPassword(),
         user.getRole(),
-        user.getGuessResponse(),
+        user.getDataResponse(),
         user.getCreatedAt(),
-        user.getGuess().stream()
-            .map(guess -> new GuessDomainEntity(guess.getId(), guess.getInput()))
+        user.getData().stream()
+            .map(data -> new DataDomainEntity(data.getId(), data.getInput(), data.getOutput(), data.getLabel()))
             .toList());
   }
 
@@ -51,10 +51,10 @@ public class UserEntityMapper {
             user.getUsername(),
             user.getPassword(),
             user.getRole(),
-            user.getGuessResponse(),
+            user.getDataResponse(),
             user.getCreatedAt(),
-            user.getGuess().stream()
-                .map(guess -> new GuessDomainEntity(guess.getId(), guess.getInput()))
+            user.getData().stream()
+                .map(data -> new DataDomainEntity(data.getId(), data.getInput(), data.getOutput(), data.getLabel()))
                 .toList()))
         .toList();
   }

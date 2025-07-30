@@ -1,4 +1,4 @@
-package com.gdwho.api.infrastructure.gateways.guess;
+package com.gdwho.api.infrastructure.gateways.data;
 
 import java.util.List;
 
@@ -6,43 +6,43 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.gdwho.api.application.gateways.GuessGateway;
+import com.gdwho.api.application.gateways.DataGateway;
 
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
-import com.gdwho.api.infrastructure.persistence.entities.GuessDBEntity;
+import com.gdwho.api.infrastructure.persistence.entities.DataDBEntity;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
-import com.gdwho.api.infrastructure.persistence.repositories.GuessRepository;
+import com.gdwho.api.infrastructure.persistence.repositories.DataRepository;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
-public class GuessImplementation implements GuessGateway {
+public class DataImplementation implements DataGateway {
 
-    private final GuessRepository guessRepository;
+    private final DataRepository dataRepository;
     private final UserRepository userRepository;
-    private final GuessEntityMapper guessEntityMapper;
+    private final DataEntityMapper dataEntityMapper;
 
-    public GuessImplementation(GuessRepository guessRepository, GuessEntityMapper guessEntityMapper,
+    public DataImplementation(DataRepository dataRepository, DataEntityMapper dataEntityMapper,
             UserRepository userRepository) {
-        this.guessRepository = guessRepository;
+        this.dataRepository = dataRepository;
         this.userRepository = userRepository;
-        this.guessEntityMapper = guessEntityMapper;
+        this.dataEntityMapper = dataEntityMapper;
     }
 
     @Transactional
     @Override
-    public void createGuess(String response, List<String> inputs, Long userId) throws UsernameNotFoundException {
+    public void createData(String response, List<String> inputs, Long userId) throws UsernameNotFoundException {
         try {
             
             UserDBEntity user = userRepository.findById(userId)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userId));
 
-            List<GuessDBEntity> guesses = guessEntityMapper.toEntityList(inputs, user);
-            user.setGuessResponse(response);
+            List<DataDBEntity> dataList = dataEntityMapper.toEntityList(inputs, user);
+            user.setDataResponse(response);
 
             userRepository.save(user);
-            guessRepository.saveAll(guesses);
+            dataRepository.saveAll(dataList);
 
         } catch (DataIntegrityViolationException ex) {
             if (ex.getCause() instanceof ConstraintViolationException
