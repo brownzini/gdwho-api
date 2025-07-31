@@ -61,8 +61,6 @@ public class GameImplementation implements GameGateway {
             List<DataDBEntity> dataListDBEntity = gameEntityMapper.toDataListDBEntity(dataList, user);
             List<EntriesDBEntity> entriesDBEntity = gameEntityMapper.toEntriesDBEntity(entries, user);
             
-            user.setDataResponse(response);
-            
             String trainResponse = modelApiUseCase.train(userId, entries);
 
             if (trainResponse.equals("success")) {
@@ -82,6 +80,12 @@ public class GameImplementation implements GameGateway {
             throw new UserPersistenceException("[Persistence Error]: Error persisting the user data", ex);
         }
 
+    }
+
+    @Transactional
+    @Override
+    public void partialUpdateData(Long dataId, String value) {
+        
     }
 
 }

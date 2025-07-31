@@ -28,7 +28,6 @@ public class UserEntityMapper {
         user.username(),
         user.password(),
         user.role(),
-        user.dataResponse(),
         user.createdAt(),
         dataDBEntity,
         entriesDBEntity);
@@ -41,7 +40,6 @@ public class UserEntityMapper {
         user.getUsername(),
         user.getPassword(),
         user.getRole(),
-        user.getDataResponse(),
         user.getCreatedAt(),
         user.getData().stream()
             .map(data -> new DataDomainEntity(data.getId(), data.getValue()))
@@ -62,7 +60,6 @@ public class UserEntityMapper {
             user.getUsername(),
             user.getPassword(),
             user.getRole(),
-            user.getDataResponse(),
             user.getCreatedAt(),
             user.getData().stream()
                 .map(data -> new DataDomainEntity(data.getId(), data.getValue()))

@@ -20,4 +20,8 @@ public class GameUseCase {
     public double guessResult(String input, Long userId) {
         return gameGateway.guessResult(input, userId);
     }
+
+    public void partialUpdateData(Long dataId, String value) {
+        gameGateway.partialUpdateData(dataId, value);
+    }
 }
