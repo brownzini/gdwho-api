@@ -12,7 +12,7 @@ import com.gdwho.api.domain.entities.auth.AuthDomainEntity;
 
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
-import com.gdwho.api.infrastructure.persistence.dtos.user.UserResponseDTO;
+import com.gdwho.api.infrastructure.persistence.dtos.user.UserPersistenceResponseDTO;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
 import com.gdwho.api.infrastructure.security.JwtUtil;
@@ -34,7 +34,7 @@ public class AuthImplementation implements AuthGateway {
     @Override
     public String login(String username, String password) {
 
-        UserResponseDTO user = userRepository.findDTOResponseByUsername(username)
+        UserPersistenceResponseDTO user = userRepository.findDTOResponseByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("[Not found Error]: User not found: " + username));
 
         if (passwordEncoder.matches(password, user.password())) {

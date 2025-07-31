@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.gdwho.api.infrastructure.gateways.exceptions.DataNotFoundException;
+import com.gdwho.api.infrastructure.gateways.exceptions.EntrieNotFoundException;
+import com.gdwho.api.infrastructure.gateways.exceptions.FieldNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NoContentAvailableDBException;
+import com.gdwho.api.infrastructure.gateways.exceptions.NoValidFieldException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
@@ -40,6 +43,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> dataNotFoundException(DataNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(EntrieNotFoundException.class)
+    public ResponseEntity<ErrorResponse> entrieNotFoundException(EntrieNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(FieldNotFoundException.class)
+    public ResponseEntity<ErrorResponse> fieldNotFoundException(FieldNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(NoValidFieldException.class)
+    public ResponseEntity<ErrorResponse> noValidFieldException(NoValidFieldException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(NotPossibleTrainModelException.class)

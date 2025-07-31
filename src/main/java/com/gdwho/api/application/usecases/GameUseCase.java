@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gdwho.api.application.gateways.GameGateway;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
+import com.github.fge.jsonpatch.JsonPatch;
 
 public class GameUseCase {
 
@@ -21,7 +22,11 @@ public class GameUseCase {
         return gameGateway.guessResult(input, userId);
     }
 
-    public void update(Long dataId, String value) {
-        gameGateway.update(dataId, value);
+    public void dataUpdate(Long dataId, String value) {
+        gameGateway.dataUpdate(dataId, value);
+    }
+
+    public void entrieUpdate(Long dataId, JsonPatch patch) {
+        gameGateway.entrieUpdate(dataId, patch);
     }
 }

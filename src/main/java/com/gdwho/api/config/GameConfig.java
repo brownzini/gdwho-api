@@ -3,6 +3,7 @@ package com.gdwho.api.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdwho.api.application.gateways.GameGateway;
 
 import com.gdwho.api.application.usecases.GameUseCase;
@@ -25,9 +26,9 @@ public class GameConfig {
     @Bean
     GameGateway gameGateway(DataRepository dataRepository, EntriesRepository entriesRepository,
             GameEntityMapper gameEntityMapper,
-            UserRepository userRepository, ModelApiUseCase modelApiUseCase) {
+            UserRepository userRepository, ModelApiUseCase modelApiUseCase, ObjectMapper objectMapper) {
         return new GameImplementation(dataRepository, entriesRepository, gameEntityMapper, userRepository,
-                modelApiUseCase);
+                modelApiUseCase, objectMapper);
     }
 
     @Bean

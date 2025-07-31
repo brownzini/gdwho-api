@@ -6,14 +6,14 @@ import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.gdwho.api.infrastructure.persistence.dtos.user.UserFilterDTO;
+import com.gdwho.api.infrastructure.persistence.dtos.user.UserPersistenceFilterDTO;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 
 import jakarta.persistence.criteria.Predicate;
 
 public class UserSpecifications {
 
-    public static Specification<UserDBEntity> withFilters(UserFilterDTO filter) {
+    public static Specification<UserDBEntity> withFilters(UserPersistenceFilterDTO filter) {
         return (root, query, cb) -> {
             final int expectedPredicates = 2;
             List<Predicate> predicates = new ArrayList<>(expectedPredicates);

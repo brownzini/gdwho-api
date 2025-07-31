@@ -5,6 +5,7 @@ import java.net.URI;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +21,7 @@ import com.gdwho.api.infrastructure.controllers.game.dto.request.CreateDataReque
 import com.gdwho.api.infrastructure.controllers.game.dto.request.UpdateDataRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.CreateDataResponseDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.SendGuessResponseDTO;
+import com.github.fge.jsonpatch.JsonPatch;
 
 import jakarta.validation.Valid;
 
@@ -54,8 +56,14 @@ public class GameController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<Void> update(@Valid @RequestBody UpdateDataRequestDTO request, @PathVariable Long id) {
-        gameUseCase.update(id, request.value());
+    public ResponseEntity<Void> updateData(@Valid @RequestBody UpdateDataRequestDTO request, @PathVariable Long id) {
+        gameUseCase.dataUpdate(id, request.value());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value="/update/entrie/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<Void> updateEntrie(@RequestBody JsonPatch patch, @PathVariable Long id) {
+        gameUseCase.entrieUpdate(id, patch);
         return ResponseEntity.noContent().build();
     }
 

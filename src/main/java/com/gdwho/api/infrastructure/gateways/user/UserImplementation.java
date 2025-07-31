@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gdwho.api.application.gateways.UserGateway;
 import com.gdwho.api.domain.entities.filter.UserFilterDomain;
 import com.gdwho.api.domain.entities.user.UserDomainEntity;
-import com.gdwho.api.infrastructure.persistence.dtos.user.UserFilterDTO;
+import com.gdwho.api.infrastructure.persistence.dtos.user.UserPersistenceFilterDTO;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
 import com.gdwho.api.infrastructure.persistence.specification.UserSpecifications;
@@ -37,7 +37,7 @@ public class UserImplementation implements UserGateway {
   @Override
   public List<UserDomainEntity> getAllUsers(Pageable pageable, UserFilterDomain filter) {
 
-    UserFilterDTO filterQuery = userEntityMapper.toFilter(filter.username(), filter.createdAfter());
+    UserPersistenceFilterDTO filterQuery = userEntityMapper.toFilter(filter.username(), filter.createdAfter());
     Specification<UserDBEntity> spec = UserSpecifications.withFilters(filterQuery);
 
     List<UserDBEntity> userDBEntity = userRepository.findAll(spec, pageable).getContent();

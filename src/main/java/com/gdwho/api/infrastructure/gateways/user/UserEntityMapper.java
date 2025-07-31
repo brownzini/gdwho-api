@@ -7,7 +7,7 @@ import com.gdwho.api.domain.entities.data.DataDomainEntity;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 import com.gdwho.api.domain.entities.user.UserDomainEntity;
 
-import com.gdwho.api.infrastructure.persistence.dtos.user.UserFilterDTO;
+import com.gdwho.api.infrastructure.persistence.dtos.user.UserPersistenceFilterDTO;
 import com.gdwho.api.infrastructure.persistence.entities.DataDBEntity;
 import com.gdwho.api.infrastructure.persistence.entities.EntriesDBEntity;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
@@ -50,8 +50,8 @@ public class UserEntityMapper {
             .toList());
   }
 
-  UserFilterDTO toFilter(String username, Instant createdAfter) {
-    return new UserFilterDTO(username, createdAfter);
+  UserPersistenceFilterDTO toFilter(String username, Instant createdAfter) {
+    return new UserPersistenceFilterDTO(username, createdAfter);
   }
 
   public List<UserDomainEntity> toDomainList(List<UserDBEntity> users) {
