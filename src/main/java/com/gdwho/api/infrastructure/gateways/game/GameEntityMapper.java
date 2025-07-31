@@ -2,7 +2,6 @@ package com.gdwho.api.infrastructure.gateways.game;
 
 import java.util.List;
 
-import com.gdwho.api.domain.entities.data.DataDomainEntity;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 import com.gdwho.api.infrastructure.persistence.entities.DataDBEntity;
 import com.gdwho.api.infrastructure.persistence.entities.EntriesDBEntity;
@@ -27,12 +26,6 @@ public class GameEntityMapper {
           data.setUser(userDBEntity);
           return data;
         })
-        .toList();
-  }
-
-  List<DataDomainEntity> toDomainList(List<DataDBEntity> inputList, UserDBEntity user) {
-    return inputList.stream()
-        .map(data -> new DataDomainEntity(data.getId(), data.getValue()))
         .toList();
   }
 

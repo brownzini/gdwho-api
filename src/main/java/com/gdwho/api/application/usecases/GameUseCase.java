@@ -21,7 +21,7 @@ public class GameUseCase {
         return gameGateway.guessResult(input, userId);
     }
 
-    public void partialUpdateData(Long dataId, String value) {
-        gameGateway.partialUpdateData(dataId, value);
+    public void update(Long dataId, String value) {
+        gameGateway.update(dataId, value);
     }
 }

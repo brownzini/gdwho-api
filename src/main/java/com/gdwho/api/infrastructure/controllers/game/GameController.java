@@ -3,6 +3,7 @@ package com.gdwho.api.infrastructure.controllers.game;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gdwho.api.application.usecases.GameUseCase;
+
 import com.gdwho.api.infrastructure.controllers.game.dto.request.CreateDataRequestDTO;
+import com.gdwho.api.infrastructure.controllers.game.dto.request.UpdateDataRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.CreateDataResponseDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.SendGuessResponseDTO;
 
@@ -50,15 +53,10 @@ public class GameController {
         return ResponseEntity.created(uri).body(new CreateDataResponseDTO("created"));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<CreateDataResponseDTO> update(@Valid @RequestBody CreateDataRequestDTO request) {
-
-        gameUseCase.createGame(request.response(), request.dataList(), request.entries(), request.id());
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(request.id()).toUri();
-
-        return ResponseEntity.created(uri).body(new CreateDataResponseDTO("created"));
+    @PutMapping("/update/data/{id}")
+    public ResponseEntity<Void> update(@Valid @RequestBody UpdateDataRequestDTO request, @PathVariable Long id) {
+        gameUseCase.update(id, request.value());
+        return ResponseEntity.noContent().build();
     }
 
 }

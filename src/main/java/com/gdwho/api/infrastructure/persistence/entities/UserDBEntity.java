@@ -26,6 +26,9 @@ public class UserDBEntity {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
+    @Column(length = 50)
+    private String dataResponse;
+
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", updatable = false)
     private Instant createdAt;
 
@@ -76,6 +79,14 @@ public class UserDBEntity {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+    public String getDataResponse() {
+        return dataResponse;
+    }
+
+    public void setDataResponse(String dataResponse) {
+        this.dataResponse = dataResponse;
     }
 
     public List<DataDBEntity> getData() {

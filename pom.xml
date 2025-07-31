@@ -147,6 +147,12 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.fge</groupId>
+			<artifactId>json-patch</artifactId>
+			<version>1.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>

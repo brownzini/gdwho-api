@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import com.gdwho.api.infrastructure.gateways.exceptions.DataNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NoContentAvailableDBException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
@@ -33,6 +34,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> userAlreadyExistsException(UserAlreadyExistsException ex) {
         ErrorResponse error = new ErrorResponse(ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<ErrorResponse> dataNotFoundException(DataNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(NotPossibleTrainModelException.class)

@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.gdwho.api.application.gateways.GameGateway;
 import com.gdwho.api.application.usecases.ModelApiUseCase;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
+import com.gdwho.api.infrastructure.gateways.exceptions.DataNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
@@ -60,7 +62,8 @@ public class GameImplementation implements GameGateway {
 
             List<DataDBEntity> dataListDBEntity = gameEntityMapper.toDataListDBEntity(dataList, user);
             List<EntriesDBEntity> entriesDBEntity = gameEntityMapper.toEntriesDBEntity(entries, user);
-            
+            user.setDataResponse(response);
+
             String trainResponse = modelApiUseCase.train(userId, entries);
 
             if (trainResponse.equals("success")) {
@@ -84,8 +87,13 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
-    public void partialUpdateData(Long dataId, String value) {
-        
+    public void update(Long dataId, String value) {
+        boolean dataExists = dataRepository.existsById(dataId);
+        if (dataExists) {
+            dataRepository.updateValueById(dataId, value);
+        } else {
+            throw new DataNotFoundException("[Error Data]: Data not found");
+        }
     }
 
 }
