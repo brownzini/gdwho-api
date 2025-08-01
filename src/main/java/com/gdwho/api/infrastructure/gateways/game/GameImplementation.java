@@ -119,7 +119,8 @@ public class GameImplementation implements GameGateway {
             boolean entriesExists = entriesRepository.existsById(entrieId);
             if (entriesExists) {
 
-                JsonNode dataNode = objectMapper.convertValue(new EntriesPersistenceDTO(null, null,null), JsonNode.class);
+                JsonNode dataNode = objectMapper.convertValue(new EntriesPersistenceDTO(null, null, null),
+                        JsonNode.class);
                 JsonNode patchedNode = patch.apply(dataNode);
 
                 EntriesPersistenceDTO patchedEntrie = objectMapper.treeToValue(patchedNode,
@@ -178,4 +179,25 @@ public class GameImplementation implements GameGateway {
                 }
             });
 
+    @Transactional
+    @Override
+    public void deleteData(Long dataId) {
+        boolean dataExists = dataRepository.existsById(dataId);
+        if (dataExists) {
+            dataRepository.deleteById(dataId);
+        } else {
+            throw new DataNotFoundException("[Error Data]: Data not found");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteEntrie(Long entrieId) {
+        boolean entriesExists = entriesRepository.existsById(entrieId);
+        if (entriesExists) {
+            entriesRepository.deleteById(entrieId);
+        } else {
+            throw new DataNotFoundException("[Error Data]: Data not found");
+        }
+    }
 }

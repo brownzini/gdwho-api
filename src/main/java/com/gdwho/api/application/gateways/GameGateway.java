@@ -10,4 +10,6 @@ public interface GameGateway {
     double guessResult(String input, Long userId);
     void   dataUpdate(Long dataId, String value);
     void   entrieUpdate(Long entriesId, JsonPatch patch);
+    void   deleteData(Long dataId);
+    void   deleteEntrie(Long entrieId);
 }

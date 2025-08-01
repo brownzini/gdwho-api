@@ -29,4 +29,12 @@ public class GameUseCase {
     public void entrieUpdate(Long dataId, JsonPatch patch) {
         gameGateway.entrieUpdate(dataId, patch);
     }
+
+    public void deleteData(Long dataId) {
+        gameGateway.deleteData(dataId);
+    }
+
+    public void deleteEntrie(Long entrieId) {
+        gameGateway.deleteEntrie(entrieId);
+    }
 }

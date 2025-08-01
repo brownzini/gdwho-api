@@ -3,7 +3,7 @@ package com.gdwho.api.infrastructure.controllers.game;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,9 +61,21 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value="/update/entrie/{id}", consumes = "application/json-patch+json")
+    @PatchMapping(value = "/update/entrie/{id}", consumes = "application/json-patch+json")
     public ResponseEntity<Void> updateEntrie(@RequestBody JsonPatch patch, @PathVariable Long id) {
         gameUseCase.entrieUpdate(id, patch);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/delete/data/{id}")
+    public ResponseEntity<Void> deleteData(@PathVariable Long id) {
+        gameUseCase.deleteData(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/delete/entrie/{id}")
+    public ResponseEntity<Void> deleteEntrie(@PathVariable Long id) {
+        gameUseCase.deleteEntrie(id);
         return ResponseEntity.noContent().build();
     }
 
