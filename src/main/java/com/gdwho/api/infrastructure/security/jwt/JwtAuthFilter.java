@@ -11,7 +11,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.gdwho.api.infrastructure.security.implemention.UserDetailsServiceImpl;
 
-import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.JwtException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,8 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
         if (path.startsWith("/v1/api/auth") || path.equals("/login")) {
@@ -45,24 +45,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
+        String token = authHeader.substring(7);
+
         try {
-            String token = authHeader.substring(7);
             String username = jwtUtil.extractUsername(token);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
 
                 if (jwtUtil.validateToken(token)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-                            null, userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-        } catch (Exception e) {
-            throw new SignatureException("[Token Processing Error]: " + e.getMessage());
-        }
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+
+        } catch (JwtException | IllegalArgumentException e) {
+            SecurityContextHolder.clearContext();
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write("{\"error\": \"[Invalid Token]: JWT signature does not match locally computed signature \"}");
+        }
     }
 
 }
