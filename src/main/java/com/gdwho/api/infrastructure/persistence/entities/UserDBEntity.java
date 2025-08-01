@@ -16,7 +16,7 @@ public class UserDBEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(unique = true, nullable = false, length = 30)
     private String username;
 
     @Column(nullable = false, length = 100)
