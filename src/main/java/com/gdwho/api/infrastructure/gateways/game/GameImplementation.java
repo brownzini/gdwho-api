@@ -78,7 +78,7 @@ public class GameImplementation implements GameGateway {
 
             List<DataDBEntity> dataListDBEntity = gameEntityMapper.toDataListDBEntity(dataList, user);
             List<EntriesDBEntity> entriesDBEntity = gameEntityMapper.toEntriesDBEntity(entries, user);
-            
+
             user.setDataResponse(response);
 
             String trainResponse = modelApiUseCase.train(userId, entries);
@@ -147,25 +147,20 @@ public class GameImplementation implements GameGateway {
     }
 
     private void validateUserPermissionMode(String type, RoleEnum role, Long IdToPersist, Long userId) {
-        if (role == RoleEnum.USER) {
-            validUserOperation(type, IdToPersist, userId);
-        }
-    }
 
-    private void validUserOperation(String type, Long IdToPersist, Long userId) {
-        if (type.contains("data")) {
-            boolean dataResponse = dataRepository.existsByIdAndUser_Id(IdToPersist, userId);
-            if (!dataResponse) {
-                throw new OperationFailedException(
-                        "[Operation Error]: User | Data does not exist or you do not have permission for this operation");
-            }
-        } else {
-            boolean entrieResponse = entriesRepository.existsByIdAndUser_Id(IdToPersist, userId);
-            if (!entrieResponse) {
-                throw new OperationFailedException(
-                        "[User Error]: User | Entrie does not exist or you do not have permission for this operation");
-            }
+        if (role != RoleEnum.USER)
+            return;
+
+        boolean hasPermission = type.contains("data")
+                ? dataRepository.existsByIdAndUser_Id(IdToPersist, userId)
+                : entriesRepository.existsByIdAndUser_Id(IdToPersist, userId);
+
+        if (!hasPermission) {
+            String entity = type.contains("data") ? "Data" : "Entrie";
+            throw new OperationFailedException(
+                    String.format("[Permission Error]: User | %s does not exist or you do not have permission", entity));
         }
+
     }
 
     private void entrieBusinessRulesValidation(EntriesPersistenceDTO entrie) {

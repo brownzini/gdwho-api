@@ -12,7 +12,7 @@ import com.gdwho.api.infrastructure.persistence.entities.EntriesDBEntity;
 
 public interface EntriesRepository extends JpaRepository<EntriesDBEntity, Long> {
 
-    boolean existsByIdAndUser_Id(Long dataId, Long userId);
+    boolean existsByIdAndUser_Id(Long entrieId, Long userId);
 
     @Query("SELECT d FROM EntriesDBEntity d WHERE d.user.id = :userId")
     List<EntriesDBEntity> findAllByUserId(@Param("userId") Long userId);
