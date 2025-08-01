@@ -15,8 +15,8 @@ import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException
 import com.gdwho.api.infrastructure.persistence.dtos.user.UserPersistenceResponseDTO;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
-import com.gdwho.api.infrastructure.security.JwtUtil;
 import com.gdwho.api.infrastructure.security.exceptions.InvalidCredentialsException;
+import com.gdwho.api.infrastructure.security.jwt.JwtUtil;
 
 public class AuthImplementation implements AuthGateway {
 
@@ -34,11 +34,11 @@ public class AuthImplementation implements AuthGateway {
     @Override
     public String login(String username, String password) {
 
-        UserPersistenceResponseDTO user = userRepository.findDTOResponseByUsername(username)
+        UserPersistenceResponseDTO user = userRepository.findPasswordAndIdByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("[Not found Error]: User not found: " + username));
 
         if (passwordEncoder.matches(password, user.password())) {
-            String token = JwtUtil.generateToken(username);
+            String token = JwtUtil.generateToken(username, user.id());
             return token;
         } else {
             throw new InvalidCredentialsException();

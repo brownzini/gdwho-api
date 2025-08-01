@@ -3,6 +3,7 @@ package com.gdwho.api.infrastructure.controllers.game;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,8 @@ import com.gdwho.api.infrastructure.controllers.game.dto.request.CreateDataReque
 import com.gdwho.api.infrastructure.controllers.game.dto.request.UpdateDataRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.CreateDataResponseDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.SendGuessResponseDTO;
+
+import com.gdwho.api.infrastructure.security.resolvers.AuthenticatedUserId;
 import com.github.fge.jsonpatch.JsonPatch;
 
 import jakarta.validation.Valid;
@@ -56,26 +59,28 @@ public class GameController {
     }
 
     @PutMapping("/update/data/{id}")
-    public ResponseEntity<Void> updateData(@Valid @RequestBody UpdateDataRequestDTO request, @PathVariable Long id) {
-        gameUseCase.dataUpdate(id, request.value());
+    public ResponseEntity<Void> updateData(@AuthenticatedUserId Long userId,
+            @Valid @RequestBody UpdateDataRequestDTO filteredReq, @PathVariable Long id) {
+
+        gameUseCase.dataUpdate(id, userId, filteredReq.value());
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/update/entrie/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<Void> updateEntrie(@RequestBody JsonPatch patch, @PathVariable Long id) {
-        gameUseCase.entrieUpdate(id, patch);
+    public ResponseEntity<Void> updateEntrie(@AuthenticatedUserId Long userId, @RequestBody JsonPatch patch, @PathVariable Long id) {
+        gameUseCase.entrieUpdate(id, userId, patch);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/data/{id}")
-    public ResponseEntity<Void> deleteData(@PathVariable Long id) {
-        gameUseCase.deleteData(id);
+    public ResponseEntity<Void> deleteData(@AuthenticatedUserId Long userId, @PathVariable Long id) {
+        gameUseCase.deleteData(id, userId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/entrie/{id}")
-    public ResponseEntity<Void> deleteEntrie(@PathVariable Long id) {
-        gameUseCase.deleteEntrie(id);
+    public ResponseEntity<Void> deleteEntrie(@AuthenticatedUserId Long userId, @PathVariable Long id) {
+        gameUseCase.deleteEntrie(id, userId);
         return ResponseEntity.noContent().build();
     }
 

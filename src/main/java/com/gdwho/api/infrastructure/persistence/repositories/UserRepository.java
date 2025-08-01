@@ -11,6 +11,6 @@ import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 public interface UserRepository extends JpaRepository<UserDBEntity, Long>, JpaSpecificationExecutor<UserDBEntity> {
 
     Optional<UserDBEntity> findByUsername(String username);
-    Optional<UserPersistenceResponseDTO> findDTOResponseByUsername(String username);
+    Optional<UserPersistenceResponseDTO> findPasswordAndIdByUsername(String username);
 
 }

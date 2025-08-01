@@ -14,9 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.gdwho.api.infrastructure.filter.RateLimitingFilter;
-import com.gdwho.api.infrastructure.security.JwtAuthFilter;
 import com.gdwho.api.infrastructure.security.exceptions.CustomAccessDeniedHandler;
 import com.gdwho.api.infrastructure.security.exceptions.CustomAuthenticationEntryPoint;
+import com.gdwho.api.infrastructure.security.jwt.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity

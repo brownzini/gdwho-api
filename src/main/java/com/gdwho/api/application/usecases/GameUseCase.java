@@ -22,19 +22,19 @@ public class GameUseCase {
         return gameGateway.guessResult(input, userId);
     }
 
-    public void dataUpdate(Long dataId, String value) {
-        gameGateway.dataUpdate(dataId, value);
+    public void dataUpdate(Long dataId, Long userId, String value) {
+        gameGateway.dataUpdate(dataId, userId, value);
     }
 
-    public void entrieUpdate(Long dataId, JsonPatch patch) {
-        gameGateway.entrieUpdate(dataId, patch);
+    public void entrieUpdate(Long dataId, Long userId, JsonPatch patch) {
+        gameGateway.entrieUpdate(dataId, userId, patch);
     }
 
-    public void deleteData(Long dataId) {
-        gameGateway.deleteData(dataId);
+    public void deleteData(Long dataId, Long userId ) {
+        gameGateway.deleteData(dataId, userId);
     }
 
-    public void deleteEntrie(Long entrieId) {
-        gameGateway.deleteEntrie(entrieId);
+    public void deleteEntrie(Long entrieId, Long userId) {
+        gameGateway.deleteEntrie(entrieId, userId);
     }
 }

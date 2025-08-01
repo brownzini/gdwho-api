@@ -1,4 +1,4 @@
-package com.gdwho.api.infrastructure.security;
+package com.gdwho.api.infrastructure.security.jwt;
 
 import java.io.IOException;
 

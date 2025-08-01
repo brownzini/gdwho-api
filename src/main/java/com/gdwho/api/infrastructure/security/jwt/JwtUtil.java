@@ -1,4 +1,4 @@
-package com.gdwho.api.infrastructure.security;
+package com.gdwho.api.infrastructure.security.jwt;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -12,8 +12,9 @@ public class JwtUtil {
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 86400000;
 
-    public static String generateToken(String username) {
+    public static String generateToken(String username, Long userId) {
         return Jwts.builder()
+                .claim("userId", userId)
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -23,6 +24,14 @@ public class JwtUtil {
     public static String extractUsername(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public static Long extractUserId(String token) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
     }
 
     public static boolean validateToken(String token) {

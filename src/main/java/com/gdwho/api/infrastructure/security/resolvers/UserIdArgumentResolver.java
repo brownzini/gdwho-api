@@ -1,0 +1,36 @@
+package com.gdwho.api.infrastructure.security.resolvers;
+
+import org.springframework.core.MethodParameter;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.ModelAndViewContainer;
+
+import com.gdwho.api.infrastructure.security.jwt.JwtUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@Component
+public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
+    @Override
+    public boolean supportsParameter(MethodParameter parameter) {
+        return parameter.getParameterAnnotation(AuthenticatedUserId.class) != null
+               && parameter.getParameterType().equals(Long.class);
+    }
+
+    @Override
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        String header = request.getHeader("Authorization");
+
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            return JwtUtil.extractUserId(token);
+        }
+
+        throw new UsernameNotFoundException("Token JWT ausente ou inválido");
+    }
+}

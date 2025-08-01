@@ -103,7 +103,7 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
-    public void dataUpdate(Long dataId, String value) {
+    public void dataUpdate(Long dataId, Long userId, String value) {
         boolean dataExists = dataRepository.existsById(dataId);
         if (dataExists) {
             dataRepository.updateValueById(dataId, value);
@@ -114,7 +114,7 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
-    public void entrieUpdate(Long entrieId, JsonPatch patch) {
+    public void entrieUpdate(Long entrieId, Long userId, JsonPatch patch) {
         try {
             boolean entriesExists = entriesRepository.existsById(entrieId);
             if (entriesExists) {
@@ -136,6 +136,28 @@ public class GameImplementation implements GameGateway {
             }
         } catch (JsonPatchException | JsonProcessingException e) {
             throw new FieldNotFoundException("[Error Field]: Field not found");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteData(Long dataId, Long userId) {
+        boolean dataExists = dataRepository.existsById(dataId);
+        if (dataExists) {
+            dataRepository.deleteById(dataId);
+        } else {
+            throw new DataNotFoundException("[Error Data]: Data not found");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteEntrie(Long entrieId, Long userId) {
+        boolean entriesExists = entriesRepository.existsById(entrieId);
+        if (entriesExists) {
+            entriesRepository.deleteById(entrieId);
+        } else {
+            throw new DataNotFoundException("[Error Data]: Data not found");
         }
     }
 
@@ -178,26 +200,4 @@ public class GameImplementation implements GameGateway {
                     throw new NoValidFieldException("[Label Error]: It should be between 0.00 and 1.00");
                 }
             });
-
-    @Transactional
-    @Override
-    public void deleteData(Long dataId) {
-        boolean dataExists = dataRepository.existsById(dataId);
-        if (dataExists) {
-            dataRepository.deleteById(dataId);
-        } else {
-            throw new DataNotFoundException("[Error Data]: Data not found");
-        }
-    }
-
-    @Transactional
-    @Override
-    public void deleteEntrie(Long entrieId) {
-        boolean entriesExists = entriesRepository.existsById(entrieId);
-        if (entriesExists) {
-            entriesRepository.deleteById(entrieId);
-        } else {
-            throw new DataNotFoundException("[Error Data]: Data not found");
-        }
-    }
 }
