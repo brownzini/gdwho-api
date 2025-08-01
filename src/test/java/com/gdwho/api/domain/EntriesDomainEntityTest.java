@@ -8,93 +8,89 @@ import org.junit.jupiter.api.Test;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 
 public class EntriesDomainEntityTest {
+
     @Test
     void shouldCreateValidEntriesDomainEntity() {
-        EntriesDomainEntity entry = new EntriesDomainEntity(1L, "inputValue", "outputValue", 0.5);
+        Long id = 1L;
+        EntriesDomainEntity entry = new EntriesDomainEntity(id, "inputValue", "outputValue", 0.5);
+
+        assertEquals(id, entry.id());
         assertEquals("inputValue", entry.input());
         assertEquals("outputValue", entry.output());
         assertEquals(0.5, entry.label());
     }
 
     @Test
-    void shouldThrowIfInputIsNull() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+    void shouldThrowWhenInputIsNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new EntriesDomainEntity(1L, null, "outputValue", 0.5);
         });
-        assertEquals("Input must have between 2 and 100 characters", ex.getMessage());
+        assertEquals("Input must have between 2 and 100 characters", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfInputIsBlank() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+    void shouldThrowWhenInputIsBlank() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new EntriesDomainEntity(1L, " ", "outputValue", 0.5);
         });
-        assertEquals("Input must have between 2 and 100 characters", ex.getMessage());
+        assertEquals("Input must have between 2 and 100 characters", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfInputTooShort() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            new EntriesDomainEntity(1L, "a", "outputValue", 0.5);
+    void shouldThrowWhenInputTooShort() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new EntriesDomainEntity(1L, "i", "outputValue", 0.5);
         });
-        assertEquals("Input must have between 2 and 100 characters", ex.getMessage());
+        assertEquals("Input must have between 2 and 100 characters", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfInputTooLong() {
-        String longInput = "a".repeat(101);
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+    void shouldThrowWhenInputTooLong() {
+        String longInput = "i".repeat(101);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new EntriesDomainEntity(1L, longInput, "outputValue", 0.5);
         });
-        assertEquals("Input must have between 2 and 100 characters", ex.getMessage());
+        assertEquals("Input must have between 2 and 100 characters", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfOutputIsNull() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+    void shouldThrowWhenOutputIsNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new EntriesDomainEntity(1L, "inputValue", null, 0.5);
         });
-        assertEquals("Output must have between 2 and 100 characters", ex.getMessage());
+        assertEquals("Output must have between 2 and 100 characters", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfOutputIsBlank() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            new EntriesDomainEntity(1L, "inputValue", " ", 0.5);
+    void shouldThrowWhenOutputTooShort() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new EntriesDomainEntity(1L, "inputValue", "o", 0.5);
         });
-        assertEquals("Output must have between 2 and 100 characters", ex.getMessage());
+        assertEquals("Output must have between 2 and 100 characters", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfOutputTooShort() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            new EntriesDomainEntity(1L, "inputValue", "a", 0.5);
-        });
-        assertEquals("Output must have between 2 and 100 characters", ex.getMessage());
-    }
-
-    @Test
-    void shouldThrowIfOutputTooLong() {
-        String longOutput = "a".repeat(101);
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+    void shouldThrowWhenOutputTooLong() {
+        String longOutput = "o".repeat(101);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new EntriesDomainEntity(1L, "inputValue", longOutput, 0.5);
         });
-        assertEquals("Output must have between 2 and 100 characters", ex.getMessage());
+        assertEquals("Output must have between 2 and 100 characters", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfLabelTooLow() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            new EntriesDomainEntity(1L, "inputValue", "outputValue", -0.01);
+    void shouldThrowWhenLabelBelowZero() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new EntriesDomainEntity(1L, "inputValue", "outputValue", -0.1);
         });
-        assertEquals("Label must be between 0.00 and 1.00", ex.getMessage());
+        assertEquals("Label must be between 0.00 and 1.00", exception.getMessage());
     }
 
     @Test
-    void shouldThrowIfLabelTooHigh() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
-            new EntriesDomainEntity(1L, "inputValue", "outputValue", 1.01);
+    void shouldThrowWhenLabelAboveOne() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new EntriesDomainEntity(1L, "inputValue", "outputValue", 1.1);
         });
-        assertEquals("Label must be between 0.00 and 1.00", ex.getMessage());
+        assertEquals("Label must be between 0.00 and 1.00", exception.getMessage());
     }
 }
