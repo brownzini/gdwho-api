@@ -12,6 +12,8 @@ import com.gdwho.api.infrastructure.persistence.entities.DataDBEntity;
 
 public interface DataRepository extends JpaRepository<DataDBEntity, Long> {
 
+    boolean existsByIdAndUser_Id(Long dataId, Long userId);
+
     @Query("SELECT d.value FROM DataDBEntity d WHERE d.user.id = :userId")
     List<String> findValuesByUserId(@Param("userId") Long userId);
 

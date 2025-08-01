@@ -38,10 +38,10 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                 RoleEnum role = RoleEnum.valueOf(roleStr);
                 return new AuthenticatedUser(userId, role);
             } catch (IllegalArgumentException e) {
-                throw new UsernameNotFoundException("Role inválida no token: " + roleStr);
+                throw new UsernameNotFoundException("[Role Error]: Operation not permitted for this role ");
             }
         }
 
-        throw new UsernameNotFoundException("Token JWT ausente ou inválido");
+        throw new UsernameNotFoundException("[JWT Error]: Missing or invalid JWT token");
     }
 }

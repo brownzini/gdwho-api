@@ -15,8 +15,7 @@ import com.gdwho.api.application.gateways.GameGateway;
 import com.gdwho.api.application.usecases.ModelApiUseCase;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 import com.gdwho.api.domain.entities.user.RoleEnum;
-import com.gdwho.api.infrastructure.gateways.exceptions.DataNotFoundException;
-import com.gdwho.api.infrastructure.gateways.exceptions.EntrieNotFoundException;
+
 import com.gdwho.api.infrastructure.gateways.exceptions.FieldNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NoValidFieldException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
@@ -104,36 +103,28 @@ public class GameImplementation implements GameGateway {
     @Transactional
     @Override
     public void dataUpdate(Long dataId, Long userId, RoleEnum role, String value) {
-        boolean dataExists = dataRepository.existsById(dataId);
-        if (dataExists) {
-            dataRepository.updateValueById(dataId, value);
-        } else {
-            throw new DataNotFoundException("[Error Data]: Data not found");
-        }
+        validateUserPermissionMode("data", role, dataId, userId);
+        dataRepository.updateValueById(dataId, value);
     }
 
     @Transactional
     @Override
     public void entrieUpdate(Long entrieId, Long userId, RoleEnum role, JsonPatch patch) {
         try {
-            boolean entriesExists = entriesRepository.existsById(entrieId);
-            if (entriesExists) {
+            validateUserPermissionMode("entrie", role, entrieId, userId);
 
-                JsonNode dataNode = objectMapper.convertValue(new EntriesPersistenceDTO(null, null, null),
-                        JsonNode.class);
-                JsonNode patchedNode = patch.apply(dataNode);
+            JsonNode dataNode = objectMapper.convertValue(new EntriesPersistenceDTO(null, null, null),
+                    JsonNode.class);
+            JsonNode patchedNode = patch.apply(dataNode);
 
-                EntriesPersistenceDTO patchedEntrie = objectMapper.treeToValue(patchedNode,
-                        EntriesPersistenceDTO.class);
+            EntriesPersistenceDTO patchedEntrie = objectMapper.treeToValue(patchedNode,
+                    EntriesPersistenceDTO.class);
 
-                entrieBusinessRulesValidation(patchedEntrie);
+            entrieBusinessRulesValidation(patchedEntrie);
 
-                entriesRepository.updateEntrieById(entrieId, patchedEntrie.input(), patchedEntrie.output(),
-                        patchedEntrie.label());
+            entriesRepository.updateEntrieById(entrieId, patchedEntrie.input(), patchedEntrie.output(),
+                    patchedEntrie.label());
 
-            } else {
-                throw new EntrieNotFoundException("[Entrie Error]: Entrie not found");
-            }
         } catch (JsonPatchException | JsonProcessingException e) {
             throw new FieldNotFoundException("[Error Field]: Field not found");
         }
@@ -142,22 +133,36 @@ public class GameImplementation implements GameGateway {
     @Transactional
     @Override
     public void deleteData(Long dataId, Long userId, RoleEnum role) {
-        boolean dataExists = dataRepository.existsById(dataId);
-        if (dataExists) {
-            dataRepository.deleteById(dataId);
-        } else {
-            throw new DataNotFoundException("[Error Data]: Data not found");
-        }
+        validateUserPermissionMode("data", role, dataId, userId);
+        dataRepository.deleteById(dataId);
     }
 
     @Transactional
     @Override
     public void deleteEntrie(Long entrieId, Long userId, RoleEnum role) {
-        boolean entriesExists = entriesRepository.existsById(entrieId);
-        if (entriesExists) {
-            entriesRepository.deleteById(entrieId);
+        validateUserPermissionMode("data", role, entrieId, userId);
+        entriesRepository.deleteById(entrieId);
+    }
+
+    private void validateUserPermissionMode(String type, RoleEnum role, Long IdToPersist, Long userId) {
+        if (role == RoleEnum.USER) {
+            validUserOperation(type, IdToPersist, userId);
+        }
+    }
+
+    private void validUserOperation(String type, Long IdToPersist, Long userId) {
+        if (type.contains("data")) {
+            boolean dataResponse = dataRepository.existsByIdAndUser_Id(IdToPersist, userId);
+            if (!dataResponse) {
+                throw new UsernameNotFoundException(
+                        "[Operation Error]: User | Data does not exist or you do not have permission for this operation");
+            }
         } else {
-            throw new DataNotFoundException("[Error Data]: Data not found");
+            boolean entrieResponse = entriesRepository.existsByIdAndUser_Id(IdToPersist, userId);
+            if (!entrieResponse) {
+                throw new UsernameNotFoundException(
+                        "[User Error]: User | Entrie does not exist or you do not have permission for this operation");
+            }
         }
     }
 
@@ -200,8 +205,4 @@ public class GameImplementation implements GameGateway {
                     throw new NoValidFieldException("[Label Error]: It should be between 0.00 and 1.00");
                 }
             });
-    
-    // private boolean validateUserRole() {
-        
-    // }
 }
