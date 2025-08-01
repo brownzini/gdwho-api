@@ -1,6 +1,3 @@
-api:
-  version: v1
-  base-path: /api
 jwt:
   secret: 9fF8kPmz4rLw2qMvGXHt5YjvTaEcZsAp
 feign:
