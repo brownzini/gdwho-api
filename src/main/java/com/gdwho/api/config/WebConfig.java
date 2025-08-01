@@ -6,19 +6,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.gdwho.api.infrastructure.security.resolvers.UserIdArgumentResolver;
+import com.gdwho.api.infrastructure.security.resolvers.UserArgumentResolver;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final UserIdArgumentResolver userIdArgumentResolver;
+    private final UserArgumentResolver userArgumentResolver;
 
-    public WebConfig(UserIdArgumentResolver userIdArgumentResolver) {
-        this.userIdArgumentResolver = userIdArgumentResolver;
+    public WebConfig(UserArgumentResolver userArgumentResolver) {
+        this.userArgumentResolver = userArgumentResolver;
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(userIdArgumentResolver);
+        resolvers.add(userArgumentResolver);
     }
+    
 }

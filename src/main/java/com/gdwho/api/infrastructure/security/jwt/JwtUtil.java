@@ -7,14 +7,17 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 
+import com.gdwho.api.domain.entities.user.RoleEnum;
+
 public class JwtUtil {
 
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 86400000;
 
-    public static String generateToken(String username, Long userId) {
+    public static String generateToken(String username, Long userId, RoleEnum role) {
         return Jwts.builder()
                 .claim("userId", userId)
+                .claim("role", role)
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -32,6 +35,14 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("userId", Long.class);
+    }
+
+    public static String extractUserRole(String token) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 
     public static boolean validateToken(String token) {

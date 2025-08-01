@@ -38,7 +38,7 @@ public class AuthImplementation implements AuthGateway {
                 .orElseThrow(() -> new UsernameNotFoundException("[Not found Error]: User not found: " + username));
 
         if (passwordEncoder.matches(password, user.password())) {
-            String token = JwtUtil.generateToken(username, user.id());
+            String token = JwtUtil.generateToken(username, user.id(), user.role());
             return token;
         } else {
             throw new InvalidCredentialsException();

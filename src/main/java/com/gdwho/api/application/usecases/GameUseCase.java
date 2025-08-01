@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gdwho.api.application.gateways.GameGateway;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
+import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.github.fge.jsonpatch.JsonPatch;
 
 public class GameUseCase {
@@ -22,19 +23,19 @@ public class GameUseCase {
         return gameGateway.guessResult(input, userId);
     }
 
-    public void dataUpdate(Long dataId, Long userId, String value) {
-        gameGateway.dataUpdate(dataId, userId, value);
+    public void dataUpdate(Long dataId, Long userId, RoleEnum role, String value) {
+        gameGateway.dataUpdate(dataId, userId, role, value);
     }
 
-    public void entrieUpdate(Long dataId, Long userId, JsonPatch patch) {
-        gameGateway.entrieUpdate(dataId, userId, patch);
+    public void entrieUpdate(Long dataId, Long userId, RoleEnum role, JsonPatch patch) {
+        gameGateway.entrieUpdate(dataId, userId, role, patch);
     }
 
-    public void deleteData(Long dataId, Long userId ) {
-        gameGateway.deleteData(dataId, userId);
+    public void deleteData(Long dataId, Long userId, RoleEnum role ) {
+        gameGateway.deleteData(dataId, userId, role);
     }
 
-    public void deleteEntrie(Long entrieId, Long userId) {
-        gameGateway.deleteEntrie(entrieId, userId);
+    public void deleteEntrie(Long entrieId, Long userId, RoleEnum role) {
+        gameGateway.deleteEntrie(entrieId, userId, role);
     }
 }

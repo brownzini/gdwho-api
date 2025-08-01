@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdwho.api.application.gateways.GameGateway;
 import com.gdwho.api.application.usecases.ModelApiUseCase;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
-
+import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.gdwho.api.infrastructure.gateways.exceptions.DataNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.EntrieNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.FieldNotFoundException;
@@ -103,7 +103,7 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
-    public void dataUpdate(Long dataId, Long userId, String value) {
+    public void dataUpdate(Long dataId, Long userId, RoleEnum role, String value) {
         boolean dataExists = dataRepository.existsById(dataId);
         if (dataExists) {
             dataRepository.updateValueById(dataId, value);
@@ -114,7 +114,7 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
-    public void entrieUpdate(Long entrieId, Long userId, JsonPatch patch) {
+    public void entrieUpdate(Long entrieId, Long userId, RoleEnum role, JsonPatch patch) {
         try {
             boolean entriesExists = entriesRepository.existsById(entrieId);
             if (entriesExists) {
@@ -141,7 +141,7 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
-    public void deleteData(Long dataId, Long userId) {
+    public void deleteData(Long dataId, Long userId, RoleEnum role) {
         boolean dataExists = dataRepository.existsById(dataId);
         if (dataExists) {
             dataRepository.deleteById(dataId);
@@ -152,7 +152,7 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
-    public void deleteEntrie(Long entrieId, Long userId) {
+    public void deleteEntrie(Long entrieId, Long userId, RoleEnum role) {
         boolean entriesExists = entriesRepository.existsById(entrieId);
         if (entriesExists) {
             entriesRepository.deleteById(entrieId);
@@ -200,4 +200,8 @@ public class GameImplementation implements GameGateway {
                     throw new NoValidFieldException("[Label Error]: It should be between 0.00 and 1.00");
                 }
             });
+    
+    // private boolean validateUserRole() {
+        
+    // }
 }

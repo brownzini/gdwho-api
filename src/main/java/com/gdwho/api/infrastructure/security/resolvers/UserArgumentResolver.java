@@ -8,27 +8,38 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.gdwho.api.infrastructure.security.jwt.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Component
-public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterAnnotation(AuthenticatedUserId.class) != null
-               && parameter.getParameterType().equals(Long.class);
+        return parameter.hasParameterAnnotation(Authenticated.class)
+                && parameter.getParameterType().equals(AuthenticatedUser.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Object resolveArgument(MethodParameter parameter,
+                                  ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest,
+                                  WebDataBinderFactory binderFactory) {
+
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String header = request.getHeader("Authorization");
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-            return JwtUtil.extractUserId(token);
+            Long userId = JwtUtil.extractUserId(token);
+            String roleStr = JwtUtil.extractUserRole(token);
+            try {
+                RoleEnum role = RoleEnum.valueOf(roleStr);
+                return new AuthenticatedUser(userId, role);
+            } catch (IllegalArgumentException e) {
+                throw new UsernameNotFoundException("Role inválida no token: " + roleStr);
+            }
         }
 
         throw new UsernameNotFoundException("Token JWT ausente ou inválido");

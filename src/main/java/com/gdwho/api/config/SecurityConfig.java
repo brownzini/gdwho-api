@@ -46,8 +46,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                     .requestMatchers("/v1/api/auth/**").permitAll()
-                        .requestMatchers("/v1/api/users/**", "/v1/api/data/**", "/v1/api/game/**").hasRole("ADMIN")
+                     .requestMatchers("/v1/api/auth/**", "/v1/api/game/**").permitAll()
+                        .requestMatchers("/v1/api/users/**", "/v1/api/data/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedHandler(accessDeniedHandler)
