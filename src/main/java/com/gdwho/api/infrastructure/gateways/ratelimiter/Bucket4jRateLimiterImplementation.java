@@ -2,7 +2,6 @@ package com.gdwho.api.infrastructure.gateways.ratelimiter;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.springframework.stereotype.Component;
 
 import com.gdwho.api.application.gateways.RateLimiterGateway;
@@ -20,17 +19,31 @@ public class Bucket4jRateLimiterImplementation implements RateLimiterGateway {
 
     private static final int TIME_LIMIT = 1;
     private static final int TOKENS_LIMIT = 10;
-    private static final int AUTH_LIMIT = 3;
+    private static final int DEFAULT_LIMIT = 5;
+
+    private static final int AUTH_LOGIN_LIMIT = 5;
+    private static final int AUTH_REGISTER_LIMIT = 3;
+
+    private static final int GAME_CREATE_LIMIT = 2;
 
     private Bucket createBucket(String route) {
         Bandwidth limit;
 
         switch (route) {
-            case "/auth":
-                limit = Bandwidth.classic(AUTH_LIMIT, Refill.greedy(TOKENS_LIMIT, Duration.ofMinutes(TIME_LIMIT)));
+            case "/v1/api/auth/login":
+                limit = Bandwidth.classic(AUTH_LOGIN_LIMIT,
+                        Refill.greedy(TOKENS_LIMIT, Duration.ofMinutes(TIME_LIMIT)));
+                break;
+            case "/v1/api/auth/register":
+                limit = Bandwidth.classic(AUTH_REGISTER_LIMIT,
+                        Refill.greedy(TOKENS_LIMIT, Duration.ofMinutes(TIME_LIMIT)));
+                break;
+            case "/v1/api/game/create":
+                limit = Bandwidth.classic(GAME_CREATE_LIMIT,
+                        Refill.greedy(TOKENS_LIMIT, Duration.ofMinutes(TIME_LIMIT)));
                 break;
             default:
-                limit = Bandwidth.classic(20, Refill.greedy(TOKENS_LIMIT, Duration.ofMinutes(TIME_LIMIT)));
+                limit = Bandwidth.classic(DEFAULT_LIMIT, Refill.greedy(TOKENS_LIMIT, Duration.ofMinutes(TIME_LIMIT)));
         }
 
         return Bucket.builder()
