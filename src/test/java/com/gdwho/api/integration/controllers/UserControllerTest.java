@@ -1,6 +1,5 @@
 package com.gdwho.api.integration.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
@@ -29,9 +28,6 @@ class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() {
