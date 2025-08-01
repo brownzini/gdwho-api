@@ -19,6 +19,7 @@ import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.gdwho.api.infrastructure.gateways.exceptions.FieldNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NoValidFieldException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
+import com.gdwho.api.infrastructure.gateways.exceptions.OperationFailedException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
 import com.gdwho.api.infrastructure.persistence.dtos.entries.EntriesPersistenceDTO;
@@ -77,6 +78,7 @@ public class GameImplementation implements GameGateway {
 
             List<DataDBEntity> dataListDBEntity = gameEntityMapper.toDataListDBEntity(dataList, user);
             List<EntriesDBEntity> entriesDBEntity = gameEntityMapper.toEntriesDBEntity(entries, user);
+            
             user.setDataResponse(response);
 
             String trainResponse = modelApiUseCase.train(userId, entries);
@@ -154,13 +156,13 @@ public class GameImplementation implements GameGateway {
         if (type.contains("data")) {
             boolean dataResponse = dataRepository.existsByIdAndUser_Id(IdToPersist, userId);
             if (!dataResponse) {
-                throw new UsernameNotFoundException(
+                throw new OperationFailedException(
                         "[Operation Error]: User | Data does not exist or you do not have permission for this operation");
             }
         } else {
             boolean entrieResponse = entriesRepository.existsByIdAndUser_Id(IdToPersist, userId);
             if (!entrieResponse) {
-                throw new UsernameNotFoundException(
+                throw new OperationFailedException(
                         "[User Error]: User | Entrie does not exist or you do not have permission for this operation");
             }
         }

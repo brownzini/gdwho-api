@@ -13,10 +13,15 @@ import com.gdwho.api.infrastructure.gateways.exceptions.FieldNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NoContentAvailableDBException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NoValidFieldException;
 import com.gdwho.api.infrastructure.gateways.exceptions.NotPossibleTrainModelException;
+import com.gdwho.api.infrastructure.gateways.exceptions.OperationFailedException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
+import com.gdwho.api.infrastructure.gateways.exceptions.UserNotFoundException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
 import com.gdwho.api.infrastructure.handler.dto.ErrorResponse;
 import com.gdwho.api.infrastructure.security.exceptions.InvalidCredentialsException;
+import com.gdwho.api.infrastructure.security.exceptions.UnauthorizedException;
+
+import io.jsonwebtoken.security.SignatureException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -25,6 +30,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUsernameNotFound(UsernameNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidJwtSignature(SignatureException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
@@ -37,6 +54,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> userAlreadyExistsException(UserAlreadyExistsException ex) {
         ErrorResponse error = new ErrorResponse(ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> userNotFoundException(UserAlreadyExistsException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(OperationFailedException.class)
+    public ResponseEntity<ErrorResponse> operationFailedException(OperationFailedException ex) {
+        ErrorResponse error = new ErrorResponse(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(DataNotFoundException.class)

@@ -11,6 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.gdwho.api.infrastructure.security.implemention.UserDetailsServiceImpl;
 
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,7 +57,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Erro ao processar token: " + e.getMessage());
+            throw new SignatureException("[Token Processing Error]: " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);

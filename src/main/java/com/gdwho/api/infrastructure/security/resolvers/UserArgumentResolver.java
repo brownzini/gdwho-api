@@ -1,7 +1,7 @@
 package com.gdwho.api.infrastructure.security.resolvers;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -9,6 +9,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.gdwho.api.domain.entities.user.RoleEnum;
+import com.gdwho.api.infrastructure.gateways.exceptions.OperationFailedException;
+import com.gdwho.api.infrastructure.security.exceptions.UnauthorizedException;
 import com.gdwho.api.infrastructure.security.jwt.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,10 +40,10 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                 RoleEnum role = RoleEnum.valueOf(roleStr);
                 return new AuthenticatedUser(userId, role);
             } catch (IllegalArgumentException e) {
-                throw new UsernameNotFoundException("[Role Error]: Operation not permitted for this role ");
+                throw new OperationFailedException("[Role Error]: Operation not permitted for this role ");
             }
         }
 
-        throw new UsernameNotFoundException("[JWT Error]: Missing or invalid JWT token");
+        throw new UnauthorizedException("[JWT Error]: Missing or invalid JWT token");
     }
 }
