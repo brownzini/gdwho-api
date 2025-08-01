@@ -10,6 +10,7 @@ import com.gdwho.api.infrastructure.controllers.auth.dtos.AuthDTOMapper;
 import com.gdwho.api.infrastructure.gateways.auth.AuthEntityMapper;
 import com.gdwho.api.infrastructure.gateways.auth.AuthImplementation;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
+import com.gdwho.api.infrastructure.security.jwt.JwtUtil;
 
 @Configuration
 public class AuthConfig {
@@ -20,8 +21,8 @@ public class AuthConfig {
     }
 
     @Bean
-    AuthGateway authGateway(UserRepository userRepository, AuthEntityMapper authEntityMapper) {
-        return new AuthImplementation(userRepository, authEntityMapper);
+    AuthGateway authGateway(UserRepository userRepository, AuthEntityMapper authEntityMapper, JwtUtil jwtUtil) {
+        return new AuthImplementation(userRepository, authEntityMapper, jwtUtil);
     }
 
     @Bean

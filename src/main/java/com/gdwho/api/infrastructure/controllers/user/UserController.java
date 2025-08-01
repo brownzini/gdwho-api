@@ -27,7 +27,7 @@ public class UserController {
 
   private final UserUseCase userUseCase;
   private final UserDTOMapper userDTOMapper;
-
+ 
   public UserController(UserUseCase userUseCase,
       UserDTOMapper userDTOMapper) {
     this.userUseCase = userUseCase;
@@ -40,7 +40,7 @@ public class UserController {
 
     UserFilterDomain filterBusinessObj = userDTOMapper.toFilterDomain(filter);
     List<UserDomainEntity> usersList = userUseCase.getAllUsers(pageable, filterBusinessObj);
-
+     
     return userDTOMapper.toGetAllUserResponse(usersList);
   }
 

@@ -21,9 +21,11 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final JwtUtil jwtUtil;
 
-    public JwtAuthFilter(UserDetailsServiceImpl userDetailsServiceImpl) {
+    public JwtAuthFilter(UserDetailsServiceImpl userDetailsServiceImpl, JwtUtil jwtUtil) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -45,12 +47,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         try {
             String token = authHeader.substring(7);
-            String username = JwtUtil.extractUsername(token);
+            String username = jwtUtil.extractUsername(token);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
 
-                if (JwtUtil.validateToken(token)) {
+                if (jwtUtil.validateToken(token)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
                             null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authToken);

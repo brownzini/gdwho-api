@@ -1,57 +1,75 @@
 package com.gdwho.api.infrastructure.security.jwt;
 
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
-import java.util.Date;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.gdwho.api.domain.entities.user.RoleEnum;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+
+@Component
 public class JwtUtil {
 
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 86400000;
 
-    public static String generateToken(String username, Long userId, RoleEnum role) {
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    private Key getSigningKey() {
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateToken(String username, Long userId, RoleEnum role) {
         return Jwts.builder()
                 .claim("userId", userId)
                 .claim("role", role)
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public static String extractUsername(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token).getBody().getSubject();
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
-    public static Long extractUserId(String token) {
-        return Jwts.parser()
-                .setSigningKey(key)
+    public Long extractUserId(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("userId", Long.class);
     }
 
-    public static String extractUserRole(String token) {
-        return Jwts.parser()
-                .setSigningKey(key)
+    public String extractUserRole(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role", String.class);
     }
 
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (JwtException e) {
             return false;
         }
     }
-
 }

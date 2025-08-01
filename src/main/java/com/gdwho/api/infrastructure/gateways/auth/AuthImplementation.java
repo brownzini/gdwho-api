@@ -23,10 +23,12 @@ public class AuthImplementation implements AuthGateway {
     private final UserRepository userRepository;
     private final AuthEntityMapper authEntityMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthImplementation(UserRepository userRepository, AuthEntityMapper authEntityMapper) {
+    public AuthImplementation(UserRepository userRepository, AuthEntityMapper authEntityMapper, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.authEntityMapper = authEntityMapper;
+        this.jwtUtil = jwtUtil;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -38,7 +40,7 @@ public class AuthImplementation implements AuthGateway {
                 .orElseThrow(() -> new UsernameNotFoundException("[Not found Error]: User not found: " + username));
 
         if (passwordEncoder.matches(password, user.password())) {
-            String token = JwtUtil.generateToken(username, user.id(), user.role());
+            String token = jwtUtil.generateToken(username, user.id(), user.role());
             return token;
         } else {
             throw new InvalidCredentialsException();
