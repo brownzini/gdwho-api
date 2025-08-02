@@ -19,6 +19,7 @@ public class UserDTOMapper {
   public List<GetAllUsersResponseDTO> toGetAllUserResponse(List<UserDomainEntity> usersList) {
     return usersList.stream()
         .map(user -> new GetAllUsersResponseDTO(
+            user.id(),
             user.username(),
             user.password(),
             user.role(),

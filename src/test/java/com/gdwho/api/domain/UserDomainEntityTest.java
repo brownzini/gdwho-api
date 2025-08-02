@@ -20,6 +20,7 @@ public class UserDomainEntityTest {
     @DisplayName("Should create valid UserDomainEntity")
     void shouldCreateValidUserDomainEntity() {
         UserDomainEntity user = new UserDomainEntity(
+                1L,
                 "first-user",
                 "senha1234567",
                 RoleEnum.USER,
@@ -39,6 +40,7 @@ public class UserDomainEntityTest {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> new UserDomainEntity(
+                        1L,
                         " ",
                         "senha1234567",
                         RoleEnum.USER,
@@ -55,6 +57,7 @@ public class UserDomainEntityTest {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> new UserDomainEntity(
+                        1L,
                         "first-user",
                         "senha1",
                         RoleEnum.USER,
@@ -71,6 +74,7 @@ public class UserDomainEntityTest {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> new UserDomainEntity(
+                        1L,
                         "first-user",
                         null,
                         RoleEnum.USER,
@@ -85,6 +89,7 @@ public class UserDomainEntityTest {
     @DisplayName("Should return true for admin user")
     void shouldReturnTrueWhenUserIsAdmin() {
         UserDomainEntity adminUser = new UserDomainEntity(
+                1L,
                 "admin-user",
                 "senha1234567",
                 RoleEnum.ADMIN,

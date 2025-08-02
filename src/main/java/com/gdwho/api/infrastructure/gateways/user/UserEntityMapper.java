@@ -37,6 +37,7 @@ public class UserEntityMapper {
 
   UserDomainEntity toDomain(UserDBEntity user) {
     return new UserDomainEntity(
+        user.getId(),
         user.getUsername(),
         user.getPassword(),
         user.getRole(),
@@ -57,6 +58,7 @@ public class UserEntityMapper {
   public List<UserDomainEntity> toDomainList(List<UserDBEntity> users) {
     return users.stream()
         .map(user -> new UserDomainEntity(
+            user.getId(),
             user.getUsername(),
             user.getPassword(),
             user.getRole(),

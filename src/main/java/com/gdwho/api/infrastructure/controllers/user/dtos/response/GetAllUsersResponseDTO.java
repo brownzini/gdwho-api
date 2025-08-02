@@ -7,6 +7,6 @@ import com.gdwho.api.domain.entities.data.DataDomainEntity;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
 import com.gdwho.api.domain.entities.user.RoleEnum;
 
-public record GetAllUsersResponseDTO(String username, String password, RoleEnum role, Instant createdAt, List<DataDomainEntity> dataList, List<EntriesDomainEntity> entries) {
+public record GetAllUsersResponseDTO(Long id, String username, String password, RoleEnum role, Instant createdAt, List<DataDomainEntity> dataList, List<EntriesDomainEntity> entries) {
 
 }

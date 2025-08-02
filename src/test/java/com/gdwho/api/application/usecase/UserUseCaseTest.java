@@ -41,8 +41,8 @@ public class UserUseCaseTest {
         Pageable pageable = Pageable.unpaged();
         UserFilterDomain filter = new UserFilterDomain(null, null);
         List<UserDomainEntity> mockUsers = List.of(
-                new UserDomainEntity("first-user", "password123457", RoleEnum.ADMIN, Instant.now(), null, null),
-                new UserDomainEntity("second-user", "password123457", RoleEnum.USER, Instant.now(), null, null));
+                new UserDomainEntity(1L,"first-user", "password123457", RoleEnum.ADMIN, Instant.now(), null, null),
+                new UserDomainEntity(2L,"second-user", "password123457", RoleEnum.USER, Instant.now(), null, null));
 
         when(userGateway.getAllUsers(pageable, filter)).thenReturn(mockUsers);
 
@@ -76,7 +76,7 @@ public class UserUseCaseTest {
 
         String username = "first-user";
 
-        UserDomainEntity mockUser = new UserDomainEntity("first-user", "password123457", RoleEnum.ADMIN, Instant.now(),
+        UserDomainEntity mockUser = new UserDomainEntity(1L,"first-user", "password123457", RoleEnum.ADMIN, Instant.now(),
                 null, null);
 
         when(userGateway.findByUsername(username)).thenReturn(mockUser);
