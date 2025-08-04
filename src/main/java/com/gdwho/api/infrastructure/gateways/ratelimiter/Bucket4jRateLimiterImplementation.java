@@ -17,7 +17,7 @@ public class Bucket4jRateLimiterImplementation implements RateLimiterGateway {
 
     private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
-    private static final int TIME_LIMIT = 1;
+    private static final int TIME_LIMIT = 12;
     private static final int TOKENS_LIMIT = 10;
     private static final int DEFAULT_LIMIT = 5;
 
