@@ -1,4 +1,4 @@
-# Projeto GDWho - API
+# Projeto GDwho - API
 
     API para o projeto GDWho. Desenvolvida para manter a comunicação entre o sistema, o modelo de machine learning e o usuário.
 
