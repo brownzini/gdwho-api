@@ -73,8 +73,8 @@ public class GameImplementation implements GameGateway {
             throws UsernameNotFoundException {
         try {
 
-            UserDBEntity user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userId));
+            UserDBEntity user = userRepository.findResponseById(userId)
+                    .orElseThrow(() -> new UsernameNotFoundException("User:" + userId+" already has a game created or does not exist"));
 
             List<DataDBEntity> dataListDBEntity = gameEntityMapper.toDataListDBEntity(dataList, user);
             List<EntriesDBEntity> entriesDBEntity = gameEntityMapper.toEntriesDBEntity(entries, user);
