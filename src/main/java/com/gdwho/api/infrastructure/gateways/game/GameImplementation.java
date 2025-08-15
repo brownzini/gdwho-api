@@ -73,8 +73,9 @@ public class GameImplementation implements GameGateway {
             throws UsernameNotFoundException {
         try {
 
-            UserDBEntity user = userRepository.findResponseById(userId)
-                    .orElseThrow(() -> new UsernameNotFoundException("User:" + userId+" already has a game created or does not exist"));
+            UserDBEntity user = userRepository.findIfResponseIsNull(userId)
+                    .orElseThrow(() -> new UsernameNotFoundException(
+                            "User already has a game created or does not exist"));
 
             List<DataDBEntity> dataListDBEntity = gameEntityMapper.toDataListDBEntity(dataList, user);
             List<EntriesDBEntity> entriesDBEntity = gameEntityMapper.toEntriesDBEntity(entries, user);
@@ -100,6 +101,15 @@ public class GameImplementation implements GameGateway {
             throw new UserPersistenceException("[Persistence Error]: Error persisting the user data", ex);
         }
 
+    }
+
+    @Transactional
+    @Override
+    public void responseUpdate(Long userId, RoleEnum role, String dataResponse) {
+        UserDBEntity user = userRepository.findIfResponseIsNotNull(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User don't have a game or does not exist"));
+        user.setDataResponse(dataResponse);
+        userRepository.save(user);
     }
 
     @Transactional
@@ -158,7 +168,8 @@ public class GameImplementation implements GameGateway {
         if (!hasPermission) {
             String entity = type.contains("data") ? "Data" : "Entrie";
             throw new OperationFailedException(
-                    String.format("[Permission Error]: User | %s does not exist or you do not have permission", entity));
+                    String.format("[Permission Error]: User | %s does not exist or you do not have permission",
+                            entity));
         }
 
     }
@@ -173,7 +184,7 @@ public class GameImplementation implements GameGateway {
         if (value == null)
             return;
 
-        Consumer<Object> validator = VALIDATION_RULES.get(fieldName);
+        Consumer<Object> validator = ENTRIES_VALIDATION_RULES.get(fieldName);
         if (validator == null) {
             throw new NoValidFieldException("[Invalid Field]: One or more invalid fields");
         }
@@ -181,7 +192,7 @@ public class GameImplementation implements GameGateway {
         validator.accept(value);
     }
 
-    private static final Map<String, Consumer<Object>> VALIDATION_RULES = Map.of(
+    private static final Map<String, Consumer<Object>> ENTRIES_VALIDATION_RULES = Map.of(
             "input", value -> {
                 String stringValue = (String) value;
                 if (stringValue.isBlank() || stringValue.length() < 2 || stringValue.length() > 100) {

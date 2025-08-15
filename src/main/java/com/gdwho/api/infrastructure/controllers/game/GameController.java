@@ -20,6 +20,7 @@ import com.gdwho.api.application.usecases.GameUseCase;
 
 import com.gdwho.api.infrastructure.controllers.game.dto.request.CreateDataRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.request.UpdateDataRequestDTO;
+import com.gdwho.api.infrastructure.controllers.game.dto.request.UpdateDataResponseRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.CreateDataResponseDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.SendGuessResponseDTO;
 
@@ -57,6 +58,14 @@ public class GameController {
                 .buildAndExpand(request.id()).toUri();
 
         return ResponseEntity.created(uri).body(new CreateDataResponseDTO("created"));
+    }
+
+    @PutMapping("/update/response")
+    public ResponseEntity<Void> updateResponse(@Authenticated AuthenticatedUser user,
+            @Valid @RequestBody UpdateDataResponseRequestDTO request) {
+
+        gameUseCase.responseUpdate(user.getId(), user.getRole(), request.response());
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/data/{id}")

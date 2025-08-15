@@ -23,12 +23,16 @@ public class GameUseCase {
         return gameGateway.guessResult(input, userId);
     }
 
+    public void responseUpdate(Long userId, RoleEnum role, String dataResponse) {
+        gameGateway.responseUpdate(userId, role, dataResponse);
+    }
+
     public void dataUpdate(Long dataId, Long userId, RoleEnum role, String value) {
         gameGateway.dataUpdate(dataId, userId, role, value);
     }
 
-    public void entrieUpdate(Long dataId, Long userId, RoleEnum role, JsonPatch patch) {
-        gameGateway.entrieUpdate(dataId, userId, role, patch);
+    public void entrieUpdate(Long entryId, Long userId, RoleEnum role, JsonPatch patch) {
+        gameGateway.entrieUpdate(entryId, userId, role, patch);
     }
 
     public void deleteData(Long dataId, Long userId, RoleEnum role ) {

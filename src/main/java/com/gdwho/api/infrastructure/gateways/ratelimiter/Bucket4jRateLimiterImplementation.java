@@ -19,7 +19,7 @@ public class Bucket4jRateLimiterImplementation implements RateLimiterGateway {
 
     private static final int TIME_LIMIT = 12;
     private static final int TOKENS_LIMIT = 10;
-    private static final int DEFAULT_LIMIT = 5;
+    private static final int DEFAULT_LIMIT = 100;
 
     private static final int AUTH_LOGIN_LIMIT = 5;
     private static final int AUTH_REGISTER_LIMIT = 3;
