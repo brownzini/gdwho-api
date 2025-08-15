@@ -7,6 +7,7 @@ import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.github.fge.jsonpatch.JsonPatch;
 
 public interface GameGateway {
+    List<Long>  getTotal();
     void   createGame(String response, List<String> dataList, List<EntriesDomainEntity> entries, Long userId);
     double guessResult(String input, Long userId);
     void   responseUpdate(Long userId, RoleEnum role, String dataResponse);

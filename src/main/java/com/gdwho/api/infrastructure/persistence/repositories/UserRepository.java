@@ -1,5 +1,6 @@
 package com.gdwho.api.infrastructure.persistence.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,7 @@ public interface UserRepository extends JpaRepository<UserDBEntity, Long>, JpaSp
 
     @Query("SELECT u.dataResponse FROM UserDBEntity u WHERE u.id = :id")
     Optional<String> findResponseById(@Param("id") Long id);
+
+    @Query("SELECT u.id FROM UserDBEntity u WHERE u.dataResponse IS NOT NULL")
+    List<Long> findIdsWithDataResponse();
 }

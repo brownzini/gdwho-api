@@ -15,6 +15,10 @@ public class GameUseCase {
         this.gameGateway = gameGateway;
     }
 
+    public List<Long> getTotal() {
+       return gameGateway.getTotal();
+    }
+
     public void createGame(String response, List<String> dataList, List<EntriesDomainEntity> entries, Long userId) {
         gameGateway.createGame(response, dataList, entries, userId);
     }

@@ -1,6 +1,7 @@
 package com.gdwho.api.infrastructure.controllers.game;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
@@ -47,6 +48,11 @@ public class GameController {
         double response = gameUseCase.guessResult(input, id);
         return new SendGuessResponseDTO(response);
 
+    }
+
+    @GetMapping("/search/total")
+    public List<Long> search() {
+        return gameUseCase.getTotal();
     }
 
     @PostMapping("/create")

@@ -59,15 +59,22 @@ public class GameImplementation implements GameGateway {
 
     @Transactional(readOnly = true)
     @Override
+    public List<Long> getTotal() {
+        return userRepository.findIdsWithDataResponse();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public double guessResult(String input, Long userId) {
 
         final String ExceptionMessage = "User not found or not have game";
+        final double SuccessResult = 1.02;
 
         String response = userRepository.findResponseById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessage));
 
         if (response.contains(input)) {
-            return 1.02;
+            return SuccessResult;
         }
 
         List<String> dataList = dataRepository.findValuesByUserId(userId);
