@@ -1,6 +1,6 @@
 -- Inserindo na tabela de usuarios
 INSERT INTO users (username, password, role, data_response, created_at) VALUES ('master', '$2a$10$EgaEA06/7BOmfVSvTOq8K.cEIO89U0AKMmQ0vwKvcT3xNZvqpdyZm', 'ADMIN', 'davi brito', NOW());
-INSERT INTO users (username, password, role, data_response, created_at) VALUES ('jeguelson', '$2a$10$EgaEA06/7BOmfVSvTOq8K.cEIO89U0AKMmQ0vwKvcT3xNZvqpdyZm', 'USER', "teste", NOW());
+INSERT INTO users (username, password, role, data_response, created_at) VALUES ('jeguelson', '$2a$10$EgaEA06/7BOmfVSvTOq8K.cEIO89U0AKMmQ0vwKvcT3xNZvqpdyZm', 'USER', 'teste', NOW());
 
 INSERT INTO users_data (value, user_id) VALUES ('conteudo teste de db', 1);
 INSERT INTO users_data (value, user_id) VALUES ('teste de data para user 2', 2);
