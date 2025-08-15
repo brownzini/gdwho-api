@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gdwho.api.application.gateways.GameGateway;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
+import com.gdwho.api.domain.entities.filter.UserFilterDomain;
 import com.gdwho.api.domain.entities.user.RoleEnum;
 import com.github.fge.jsonpatch.JsonPatch;
 
@@ -15,7 +16,7 @@ public class GameUseCase {
         this.gameGateway = gameGateway;
     }
 
-    public List<Long> getTotal() {
+    public List<UserFilterDomain> getTotal() {
        return gameGateway.getTotal();
     }
 

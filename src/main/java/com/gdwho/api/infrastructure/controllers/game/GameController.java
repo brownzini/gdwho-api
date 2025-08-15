@@ -18,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gdwho.api.application.usecases.GameUseCase;
-
+import com.gdwho.api.domain.entities.filter.UserFilterDomain;
 import com.gdwho.api.infrastructure.controllers.game.dto.request.CreateDataRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.request.UpdateDataRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.request.UpdateDataResponseRequestDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.CreateDataResponseDTO;
+import com.gdwho.api.infrastructure.controllers.game.dto.response.GetTotalGamesResponseDTO;
 import com.gdwho.api.infrastructure.controllers.game.dto.response.SendGuessResponseDTO;
 
 import com.gdwho.api.infrastructure.security.resolvers.Authenticated;
@@ -36,9 +37,11 @@ import jakarta.validation.Valid;
 public class GameController {
 
     private final GameUseCase gameUseCase;
+    private final GameDTOMapper gameDTOMapper;
 
-    public GameController(GameUseCase gameUseCase) {
+    public GameController(GameUseCase gameUseCase, GameDTOMapper gameDTOMapper) {
         this.gameUseCase = gameUseCase;
+        this.gameDTOMapper = gameDTOMapper;
     }
 
     @GetMapping("/{id}/guess")
@@ -51,8 +54,9 @@ public class GameController {
     }
 
     @GetMapping("/search/total")
-    public List<Long> search() {
-        return gameUseCase.getTotal();
+    public List<GetTotalGamesResponseDTO> search() {
+        List<UserFilterDomain> gameList = gameUseCase.getTotal();
+        return gameDTOMapper.toResponse(gameList);
     }
 
     @PostMapping("/create")

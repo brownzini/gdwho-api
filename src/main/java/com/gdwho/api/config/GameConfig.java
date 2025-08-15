@@ -8,7 +8,7 @@ import com.gdwho.api.application.gateways.GameGateway;
 
 import com.gdwho.api.application.usecases.GameUseCase;
 import com.gdwho.api.application.usecases.ModelApiUseCase;
-
+import com.gdwho.api.infrastructure.controllers.game.GameDTOMapper;
 import com.gdwho.api.infrastructure.gateways.game.GameEntityMapper;
 import com.gdwho.api.infrastructure.gateways.game.GameImplementation;
 import com.gdwho.api.infrastructure.persistence.repositories.DataRepository;
@@ -34,5 +34,10 @@ public class GameConfig {
     @Bean
     GameEntityMapper gameEntityMapper() {
         return new GameEntityMapper();
+    }
+
+    @Bean
+    GameDTOMapper gameDTOMapper() {
+        return new GameDTOMapper();
     }
 }

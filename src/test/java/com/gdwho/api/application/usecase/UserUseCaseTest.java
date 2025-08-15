@@ -39,7 +39,7 @@ public class UserUseCaseTest {
     void shouldReturnListOfUsersFromGateway() {
 
         Pageable pageable = Pageable.unpaged();
-        UserFilterDomain filter = new UserFilterDomain(null, null);
+        UserFilterDomain filter = new UserFilterDomain(null, null, null);
         List<UserDomainEntity> mockUsers = List.of(
                 new UserDomainEntity(1L,"first-user", "password123457", RoleEnum.ADMIN, Instant.now(), null, null),
                 new UserDomainEntity(2L,"second-user", "password123457", RoleEnum.USER, Instant.now(), null, null));
@@ -56,7 +56,7 @@ public class UserUseCaseTest {
     @DisplayName("Expect error in getAllUsers return")
     void shouldThrowExceptionWhenGatewayFails() {
         Pageable pageable = Pageable.unpaged();
-        UserFilterDomain filter = new UserFilterDomain(null, null);
+        UserFilterDomain filter = new UserFilterDomain(null, null, null);
 
         RuntimeException expectedException = new RuntimeException("Database error");
 

@@ -64,7 +64,7 @@ class UserUseCaseIntegrationTest {
         userRepository.saveAll(List.of(user1, user2));
 
         var result = userUseCase.getAllUsers(Pageable.unpaged(),
-                new com.gdwho.api.domain.entities.filter.UserFilterDomain(null, null));
+                new com.gdwho.api.domain.entities.filter.UserFilterDomain(null, null, null));
 
         assertNotNull(result);
         assertEquals(2, result.size());

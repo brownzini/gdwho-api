@@ -15,7 +15,7 @@ public class UserFilterDomainTest {
     @Test
     @DisplayName("Should allow null values in UserFilterDomain")
     void shouldAllowNullFields() {
-        UserFilterDomain filter = new UserFilterDomain(null, null);
+        UserFilterDomain filter = new UserFilterDomain(null, null, null);
 
         assertNull(filter.username());
         assertNull(filter.createdAfter());
@@ -24,7 +24,7 @@ public class UserFilterDomainTest {
     @Test
     @DisplayName("Should create UserFilterDomain with only username")
     void shouldCreateWithOnlyUsername() {
-        UserFilterDomain filter = new UserFilterDomain("onlyUsername", null);
+        UserFilterDomain filter = new UserFilterDomain(10L, "onlyUsername", null);
 
         assertEquals("onlyUsername", filter.username());
         assertNull(filter.createdAfter());
@@ -34,7 +34,7 @@ public class UserFilterDomainTest {
     @DisplayName("Should create UserFilterDomain with only createdAfter")
     void shouldCreateWithOnlyCreatedAfter() {
         Instant createdAfter = Instant.parse("2024-01-01T00:00:00Z");
-        UserFilterDomain filter = new UserFilterDomain(null, createdAfter);
+        UserFilterDomain filter = new UserFilterDomain(10L,null, createdAfter);
 
         assertNull(filter.username());
         assertEquals(createdAfter, filter.createdAfter());

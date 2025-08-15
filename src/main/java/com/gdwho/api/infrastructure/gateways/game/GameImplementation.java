@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdwho.api.application.gateways.GameGateway;
 import com.gdwho.api.application.usecases.ModelApiUseCase;
 import com.gdwho.api.domain.entities.entries.EntriesDomainEntity;
+import com.gdwho.api.domain.entities.filter.UserFilterDomain;
 import com.gdwho.api.domain.entities.user.RoleEnum;
 
 import com.gdwho.api.infrastructure.gateways.exceptions.FieldNotFoundException;
@@ -23,6 +24,7 @@ import com.gdwho.api.infrastructure.gateways.exceptions.OperationFailedException
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
 import com.gdwho.api.infrastructure.persistence.dtos.entries.EntriesPersistenceDTO;
+import com.gdwho.api.infrastructure.persistence.dtos.user.ListUserWithGameResponseDTO;
 import com.gdwho.api.infrastructure.persistence.entities.DataDBEntity;
 import com.gdwho.api.infrastructure.persistence.entities.EntriesDBEntity;
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
@@ -59,8 +61,9 @@ public class GameImplementation implements GameGateway {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Long> getTotal() {
-        return userRepository.findIdsWithDataResponse();
+    public List<UserFilterDomain> getTotal() {
+        List<ListUserWithGameResponseDTO> gameList = userRepository.findGamesWithDataResponseIfNotNull();
+        return gameEntityMapper.toGameListController(gameList);
     }
 
     @Transactional(readOnly = true)

@@ -13,7 +13,7 @@ import com.gdwho.api.infrastructure.controllers.user.dtos.response.GetAllUsersRe
 public class UserDTOMapper {
 
   public UserFilterDomain toFilterDomain(GetAllUsersRequestDTO request) {
-    return new UserFilterDomain(request.username(), request.createdAfter());
+    return new UserFilterDomain(null, request.username(), request.createdAfter());
   }
 
   public List<GetAllUsersResponseDTO> toGetAllUserResponse(List<UserDomainEntity> usersList) {
