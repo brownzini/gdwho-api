@@ -14,9 +14,14 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<UserDBEntity, Long>, JpaSpecificationExecutor<UserDBEntity> {
 
     Optional<UserDBEntity> findByUsername(String username);
+    
     Optional<UserPersistenceResponseDTO> findPasswordAndIdByUsername(String username);
     @Query("SELECT u FROM UserDBEntity u WHERE u.id = :id AND u.dataResponse IS NULL")
     Optional<UserDBEntity> findIfResponseIsNull(@Param("id") Long id);
+
     @Query("SELECT u FROM UserDBEntity u WHERE u.id = :id AND u.dataResponse IS NOT NULL")
     Optional<UserDBEntity> findIfResponseIsNotNull(@Param("id") Long id);
+
+    @Query("SELECT u.dataResponse FROM UserDBEntity u WHERE u.id = :id")
+    Optional<String> findResponseById(@Param("id") Long id);
 }

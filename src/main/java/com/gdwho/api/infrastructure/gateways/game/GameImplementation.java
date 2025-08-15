@@ -60,11 +60,23 @@ public class GameImplementation implements GameGateway {
     @Transactional(readOnly = true)
     @Override
     public double guessResult(String input, Long userId) {
+
+        final String ExceptionMessage = "User not found or not have game";
+
+        String response = userRepository.findResponseById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessage));
+
+        if (response.contains(input)) {
+            return 1.02;
+        }
+
         List<String> dataList = dataRepository.findValuesByUserId(userId);
         if (dataList.isEmpty()) {
-            throw new UsernameNotFoundException("User not found: " + userId);
+            throw new UsernameNotFoundException(ExceptionMessage);
         }
+
         return modelApiUseCase.guess(userId, dataList, input);
+
     }
 
     @Transactional
