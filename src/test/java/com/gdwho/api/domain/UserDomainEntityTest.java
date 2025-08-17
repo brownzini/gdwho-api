@@ -24,9 +24,10 @@ public class UserDomainEntityTest {
                 "first-user",
                 "senha1234567",
                 RoleEnum.USER,
+                "response",
                 Instant.now(),
                 List.of(),
-                List.of());
+                List.of(), null);
 
         assertEquals("first-user", user.username());
         assertEquals("senha1234567", user.password());
@@ -44,9 +45,10 @@ public class UserDomainEntityTest {
                         " ",
                         "senha1234567",
                         RoleEnum.USER,
+                        "response",
                         Instant.now(),
                         List.of(),
-                        List.of()));
+                        List.of(), null));
 
         assertEquals("Username cannot be blank", exception.getMessage());
     }
@@ -61,9 +63,10 @@ public class UserDomainEntityTest {
                         "first-user",
                         "senha1",
                         RoleEnum.USER,
+                        "response",
                         Instant.now(),
                         null,
-                        null));
+                        null, null));
 
         assertEquals("Password must have at least 8 characters", exception.getMessage());
     }
@@ -78,9 +81,10 @@ public class UserDomainEntityTest {
                         "first-user",
                         null,
                         RoleEnum.USER,
+                        "response",
                         Instant.now(),
                         null,
-                        null));
+                        null, null));
 
         assertEquals("Password must have at least 8 characters", exception.getMessage());
     }
@@ -93,9 +97,10 @@ public class UserDomainEntityTest {
                 "admin-user",
                 "senha1234567",
                 RoleEnum.ADMIN,
+                "response",
                 Instant.now(),
                 null,
-                null);
+                null, null);
 
         assertTrue(adminUser.isAdmin());
     }

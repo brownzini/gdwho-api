@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gdwho.api.application.gateways.AuthGateway;
 import com.gdwho.api.domain.entities.auth.AuthDomainEntity;
-
+import com.gdwho.api.domain.entities.user.UserDomainEntity;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserAlreadyExistsException;
 import com.gdwho.api.infrastructure.gateways.exceptions.UserPersistenceException;
-import com.gdwho.api.infrastructure.persistence.dtos.user.UserPersistenceResponseDTO;
+
 import com.gdwho.api.infrastructure.persistence.entities.UserDBEntity;
 import com.gdwho.api.infrastructure.persistence.repositories.UserRepository;
 import com.gdwho.api.infrastructure.security.exceptions.InvalidCredentialsException;
@@ -34,17 +34,33 @@ public class AuthImplementation implements AuthGateway {
 
     @Transactional(readOnly = true)
     @Override
-    public String login(String username, String password) {
+    public UserDomainEntity login(Long userId, String username, String password, String oldToken) {
+        return (userId != null)
+                ? loginWithToken(userId, oldToken)
+                : loginWithCredentials(username, password);
+    }
 
-        UserPersistenceResponseDTO user = userRepository.findPasswordAndIdByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("[Not found Error]: User not found: " + username));
+    private UserDomainEntity loginWithToken(Long userId, String oldToken) {
+        
+        UserDBEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "[Not found Error]: User not found with id: " + userId));
 
-        if (passwordEncoder.matches(password, user.password())) {
-            String token = jwtUtil.generateToken(username, user.id(), user.role());
-            return token;
-        } else {
+        return authEntityMapper.toUserDomain(user, userId, user.getUsername(), oldToken);
+    }
+
+    private UserDomainEntity loginWithCredentials(String username, String password) {
+
+        UserDBEntity user = userRepository.findPasswordAndIdByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "[Not found Error]: User not found: " + username));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidCredentialsException();
         }
+
+        String token = jwtUtil.generateToken(username, user.getId(), user.getRole());
+        return authEntityMapper.toUserDomain(user, user.getId(), username, token);
     }
 
     @Transactional
@@ -64,7 +80,8 @@ public class AuthImplementation implements AuthGateway {
         } catch (DataIntegrityViolationException ex) {
             if (ex.getCause() instanceof ConstraintViolationException
                     && ex.getMessage().toLowerCase().contains("unique")) {
-                throw new UserAlreadyExistsException("[Invalid user Error]: A user with this username already exists", ex);
+                throw new UserAlreadyExistsException("[Invalid user Error]: A user with this username already exists",
+                        ex);
             }
             throw new UserPersistenceException("[Persistence Error]: Error persisting the user", ex);
         }

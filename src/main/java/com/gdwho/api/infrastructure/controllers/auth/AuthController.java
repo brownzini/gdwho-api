@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gdwho.api.application.usecases.AuthUseCase;
 import com.gdwho.api.domain.entities.auth.AuthDomainEntity;
-
+import com.gdwho.api.domain.entities.user.UserDomainEntity;
 import com.gdwho.api.infrastructure.controllers.auth.dtos.AuthDTOMapper;
 import com.gdwho.api.infrastructure.controllers.auth.dtos.request.LoginAuthRequestDTO;
 import com.gdwho.api.infrastructure.controllers.auth.dtos.request.RegisterAuthRequestDTO;
@@ -39,20 +39,37 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginAuthResponseDTO login(@Nullable @RequestHeader("Authorization") String authorizationHeader,
+    public LoginAuthResponseDTO login(
+            @Nullable @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody LoginAuthRequestDTO request) {
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
-            if(jwtUtil.validateToken(token)) {
-               return new LoginAuthResponseDTO(token);
-            } else {
-               throw new UnauthorizedException("[Session Error]: Your session is invalid");
-            }
-        } else {
-            return new LoginAuthResponseDTO(authUseCase.login(request.username(), request.password()));
+        if (isBearerTokenValid(authorizationHeader)) {
+            String token = extractToken(authorizationHeader);
+            Long userId = jwtUtil.extractUserId(token);
+
+            UserDomainEntity userData = authUseCase.login(userId, null, null, token);
+            return authDTOMapper.toLoginAuthResponse(userData);
         }
-        
+
+        UserDomainEntity userData = authUseCase.login(null, request.username(), request.password(), null);
+        return authDTOMapper.toLoginAuthResponse(userData);
+    }
+
+    private boolean isBearerTokenValid(String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return false;
+        }
+
+        String token = extractToken(authorizationHeader);
+        if (!jwtUtil.validateToken(token)) {
+            throw new UnauthorizedException("[Session Error]: Your session is invalid");
+        }
+
+        return true;
+    }
+
+    private String extractToken(String authorizationHeader) {
+        return authorizationHeader.substring(7);
     }
 
     @PostMapping("/register")

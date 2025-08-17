@@ -4,7 +4,13 @@ import com.gdwho.api.application.gateways.AuthGateway;
 import com.gdwho.api.application.usecases.AuthUseCase;
 import com.gdwho.api.domain.entities.auth.AuthDomainEntity;
 
+import com.gdwho.api.domain.entities.user.RoleEnum;
+import com.gdwho.api.domain.entities.user.UserDomainEntity;
+import com.gdwho.api.infrastructure.controllers.auth.dtos.AuthDTOMapper;
+import com.gdwho.api.infrastructure.controllers.auth.dtos.response.LoginAuthResponseDTO;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,44 +18,60 @@ import static org.mockito.Mockito.*;
 
 class AuthUseCaseTest {
 
-    private AuthGateway authGateway;
+    private AuthGateway mockGateway;
     private AuthUseCase authUseCase;
+    private AuthDTOMapper authDTOMapper;
 
     @BeforeEach
     void setUp() {
-        authGateway = mock(AuthGateway.class);
-        authUseCase = new AuthUseCase(authGateway);
+        mockGateway = mock(AuthGateway.class); 
+        authUseCase = new AuthUseCase(mockGateway);
+        authDTOMapper = new AuthDTOMapper();
     }
 
     @Test
-    void testLoginReturnsToken() {
+    @DisplayName("Should return LoginAuthResponseDTO from login")
+    void shouldReturnLoginAuthResponseDTOFromLogin() {
+
         String username = "brownzini";
-        String password = "senha123";
+        String password = "Senha123";
         String expectedToken = "jwt-mocked";
 
-        when(authGateway.login(username, password)).thenReturn(expectedToken);
+        // Criação de objetos do domínio
+        UserDomainEntity mockedUser = new UserDomainEntity(
+                1L, username, password, RoleEnum.ADMIN, null, null, null, null, expectedToken);
 
-        String result = authUseCase.login(username, password);
+        // Aqui usamos o mock corretamente
+        when(mockGateway.login(null, username, password, null)).thenReturn(mockedUser);
 
-        assertEquals(expectedToken, result);
-        verify(authGateway).login(username, password);
+        // Act
+        UserDomainEntity userDomain = authUseCase.login(null, username, password, null);
+        LoginAuthResponseDTO responseDTO = authDTOMapper.toLoginAuthResponse(userDomain);
+
+        // Assert
+        assertEquals(username, responseDTO.username());
+        assertEquals(expectedToken, responseDTO.token());
+        verify(mockGateway, times(1)).login(null, username, password, null);
     }
 
     @Test
+    @DisplayName("Should return AuthDomainEntity when register is successful")
     void testRegisterReturnsAuthDomainEntity() {
+        // Arrange
         String username = "brownzini";
         String password = "senha123";
-        AuthDomainEntity expected = new AuthDomainEntity(1L, username, password);
+        AuthDomainEntity expectedEntity = new AuthDomainEntity(1L, username, password);
 
-        when(authGateway.register(username, password)).thenReturn(expected);
+        when(mockGateway.register(username, password)).thenReturn(expectedEntity);
 
-        AuthDomainEntity result = authUseCase.register(username, password);
+        // Act
+        AuthDomainEntity actualEntity = authUseCase.register(username, password);
 
-        assertNotNull(result);
-        assertEquals(expected.id(), result.id());
-        assertEquals(expected.username(), result.username());
-        assertEquals(expected.password(), result.password());
-        verify(authGateway).register(username, password);
+        // Assert
+        assertNotNull(actualEntity);
+        assertEquals(expectedEntity.id(), actualEntity.id());
+        assertEquals(expectedEntity.username(), actualEntity.username());
+        assertEquals(expectedEntity.password(), actualEntity.password());
+        verify(mockGateway, times(1)).register(username, password);
     }
 }
-
