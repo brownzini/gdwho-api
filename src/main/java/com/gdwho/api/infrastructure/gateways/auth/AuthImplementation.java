@@ -45,7 +45,7 @@ public class AuthImplementation implements AuthGateway {
         UserDBEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "[Not found Error]: User not found with id: " + userId));
-
+        
         return authEntityMapper.toUserDomain(user, userId, user.getUsername(), oldToken);
     }
 

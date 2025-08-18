@@ -43,10 +43,12 @@ public class AuthController {
             @Nullable @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody LoginAuthRequestDTO request) {
 
+
+                
         if (isBearerTokenValid(authorizationHeader)) {
             String token = extractToken(authorizationHeader);
             Long userId = jwtUtil.extractUserId(token);
-
+            
             UserDomainEntity userData = authUseCase.login(userId, null, null, token);
             return authDTOMapper.toLoginAuthResponse(userData);
         }
@@ -71,7 +73,7 @@ public class AuthController {
     private String extractToken(String authorizationHeader) {
         return authorizationHeader.substring(7);
     }
-
+    
     @PostMapping("/register")
     public ResponseEntity<RegisterAuthResponseDTO> register(@Valid @RequestBody RegisterAuthRequestDTO request) {
         AuthDomainEntity authenticadeUser = authUseCase.register(request.username(), request.password());
