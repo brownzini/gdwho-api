@@ -11,6 +11,7 @@ public interface GameGateway {
     List<UserFilterDomain>  getTotal();
     void   createGame(String response, List<String> dataList, List<EntriesDomainEntity> entries, Long userId);
     double guessResult(String input, Long userId);
+    void   deleteGame(Long userId);
     void   responseUpdate(Long userId, RoleEnum role, String dataResponse);
     void   dataUpdate(Long dataId, Long userId, RoleEnum role, String value);
     void   entrieUpdate(Long entryId, Long userId, RoleEnum role, JsonPatch patch);

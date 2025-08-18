@@ -24,6 +24,10 @@ public class GameUseCase {
         gameGateway.createGame(response, dataList, entries, userId);
     }
 
+    public void deleteGame(Long userId) {
+        gameGateway.deleteGame(userId);
+    }
+
     public double guessResult(String input, Long userId) {
         return gameGateway.guessResult(input, userId);
     }

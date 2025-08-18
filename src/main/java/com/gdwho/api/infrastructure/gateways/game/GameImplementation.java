@@ -127,6 +127,14 @@ public class GameImplementation implements GameGateway {
 
     @Transactional
     @Override
+    public void deleteGame(Long userId) {
+        userRepository.clearDataResponseNative(userId);
+        dataRepository.deleteByUserId(userId);
+        entriesRepository.deleteByUserId(userId);
+    }
+
+    @Transactional
+    @Override
     public void responseUpdate(Long userId, RoleEnum role, String dataResponse) {
         UserDBEntity user = userRepository.findIfResponseIsNotNull(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User don't have a game or does not exist"));

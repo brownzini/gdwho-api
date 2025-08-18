@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.gdwho.api.infrastructure.persistence.dtos.user.ListUserWithGameResponseDTO;
@@ -34,4 +35,8 @@ public interface UserRepository extends JpaRepository<UserDBEntity, Long>, JpaSp
                         +
                         "FROM UserDBEntity u WHERE u.dataResponse IS NOT NULL")
         List<ListUserWithGameResponseDTO> findGamesWithDataResponseIfNotNull();
+
+        @Modifying
+        @Query(value = "UPDATE users SET data_response = NULL WHERE id = :id", nativeQuery = true)
+        void clearDataResponseNative(@Param("id") Long id);
 }

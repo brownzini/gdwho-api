@@ -34,4 +34,8 @@ public interface EntriesRepository extends JpaRepository<EntriesDBEntity, Long> 
             @Param("input") String input,
             @Param("output") String output,
             @Param("label") Double label);
+        
+    @Modifying
+    @Query("DELETE FROM EntriesDBEntity e WHERE e.user.id = :userId")
+    void deleteByUserId(@Param("userId") Long userId);
 }

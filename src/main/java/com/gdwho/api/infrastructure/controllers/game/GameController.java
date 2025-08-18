@@ -60,7 +60,7 @@ public class GameController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CreateDataResponseDTO> createData(@Valid @RequestBody CreateDataRequestDTO request) {
+    public ResponseEntity<CreateDataResponseDTO> createGame(@Valid @RequestBody CreateDataRequestDTO request) {
 
         gameUseCase.createGame(request.response(), request.dataList(), request.entries(), request.id());
 
@@ -68,6 +68,12 @@ public class GameController {
                 .buildAndExpand(request.id()).toUri();
 
         return ResponseEntity.created(uri).body(new CreateDataResponseDTO("created"));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteGame(@Authenticated AuthenticatedUser user) {
+        gameUseCase.deleteGame(user.getId());
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/response")

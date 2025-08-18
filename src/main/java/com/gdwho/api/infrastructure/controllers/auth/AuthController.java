@@ -43,8 +43,6 @@ public class AuthController {
             @Nullable @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody LoginAuthRequestDTO request) {
 
-
-                
         if (isBearerTokenValid(authorizationHeader)) {
             String token = extractToken(authorizationHeader);
             Long userId = jwtUtil.extractUserId(token);

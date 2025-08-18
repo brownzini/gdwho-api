@@ -21,4 +21,8 @@ public interface DataRepository extends JpaRepository<DataDBEntity, Long> {
     @Query("UPDATE DataDBEntity e SET e.value = :value WHERE e.id = :id")
     void updateValueById(@Param("id") Long id, @Param("value") String value);
 
+    @Modifying
+    @Query("DELETE FROM DataDBEntity d WHERE d.user.id = :userId")
+    void deleteByUserId(@Param("userId") Long userId);
+
 }
